@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <!--Palette-->
+    <color name="purple">#7e3ff2</color>
+    <color name="pink">#f23fb3</color>
+    <color name="orange">#f27e3f</color>
+    <color name="white">#ffffff</color>
+    <color name="black">#000000</color>
+
+    <!--Translucent Palette-->
+    <color name="trans_black_de">#de000000</color>
+    <color name="trans_black_36">#36000000</color>
+    <color name="trans_gray_de">#de929292</color>
+
+    <color name="primaryColor">@color/purple</color>
+    <color name="primaryVariant">#5200e8</color>
+    <color name="primaryVariant2">#b794f6</color>
+    <color name="secondary">@color/orange</color>
+    <color name="secondaryVariant">#faa646</color>
+    <color name="background">@color/white</color>
+    <color name="surface">@color/white</color>
+    <color name="error">#B00020</color>
+    <color name="onPrimary">@color/white</color>
+    <color name="onSecondary">@color/black</color>
+    <color name="onBackground">@color/black</color>
+    <color name="onSurface">@color/black</color>
+    <color name="onError">@color/white</color>
+
+    <color name="light_theme_divider">#1f000000</color>
+    <color name="dark_theme_divider">#1fffffff</color>
+</resources>
