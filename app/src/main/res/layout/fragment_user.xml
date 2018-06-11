@@ -39,10 +39,11 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
+            android:fontFeatureSettings="onum, smcp"
             android:textAppearance="@style/TextAppearance.NotifyMoe.Headline5"
             app:layout_constraintBaseline_toBaselineOf="@+id/nickNameTextView"
             app:layout_constraintStart_toEndOf="@+id/nickNameTextView"
-            tools:text="22" />
+            tools:text="23" />
 
         <TextView
             android:id="@+id/descriptionTextView"
