@@ -1,6 +1,7 @@
 package app.soulcramer.soone.db
 
 import android.arch.lifecycle.LiveData
+import android.arch.lifecycle.Transformations
 import app.soulcramer.soone.vo.user.User
 import app.soulcramer.soone.vo.user.UserFields
 import com.zhuinden.monarchy.Monarchy
@@ -15,9 +16,12 @@ class UserDao @Inject constructor(private val monarchy: Monarchy) {
         monarchy.runTransactionSync { it.copyToRealmOrUpdate(user) }
     }
 
-    fun findById(id: String): LiveData<List<User>> {
-        return monarchy.findAllCopiedWithChanges { realm ->
+    fun findById(id: String): LiveData<User> {
+        val usersLiveData = monarchy.findAllCopiedWithChanges { realm ->
             realm.where<User>().equalTo(UserFields.ID, id)
+        }
+        return Transformations.map(usersLiveData) {
+            it.firstOrNull()
         }
     }
 }

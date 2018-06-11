@@ -5,6 +5,7 @@ import android.app.Application
 import android.os.StrictMode
 import app.soulcramer.soone.di.AppInjector
 import com.github.ajalt.timberkt.Timber
+import com.jakewharton.threetenabp.AndroidThreeTen
 import com.zhuinden.monarchy.Monarchy
 import dagger.android.DispatchingAndroidInjector
 import dagger.android.HasActivityInjector
@@ -19,6 +20,8 @@ class Soone : Application(), HasActivityInjector {
         super.onCreate()
         Monarchy.init(this)
         AppInjector.init(this)
+        AndroidThreeTen.init(this)
+
         if (BuildConfig.DEBUG) {
             Timber.plant(Timber.DebugTree())
             StrictMode.setThreadPolicy(StrictMode.ThreadPolicy.Builder()

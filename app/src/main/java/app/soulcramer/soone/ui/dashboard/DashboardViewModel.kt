@@ -14,7 +14,7 @@ class DashboardViewModel @Inject constructor(userRepository: UserRepository) : V
     private val _nick = MutableLiveData<String>()
     val nick: LiveData<String>
         get() = _nick
-    val user: LiveData<Resource<List<User>>> = Transformations
+    val user: LiveData<Resource<User>> = Transformations
         .switchMap(_nick) { id ->
             if (id == null) {
                 AbsentLiveData.create()

@@ -12,6 +12,10 @@ import app.soulcramer.soone.common.observeK
 import app.soulcramer.soone.di.Injectable
 import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.fragment_user.*
+import org.threeten.bp.DateTimeUtils
+import org.threeten.bp.LocalDate
+import org.threeten.bp.Period
+import org.threeten.bp.ZoneId
 import javax.inject.Inject
 
 class UserFragment : Fragment(), Injectable {
@@ -21,9 +25,9 @@ class UserFragment : Fragment(), Injectable {
     private lateinit var userViewModel: UserViewModel
 
     override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
+            inflater: LayoutInflater,
+            container: ViewGroup?,
+            savedInstanceState: Bundle?
     ): View? {
         return inflater.inflate(R.layout.fragment_user, container, false)
     }
@@ -31,30 +35,22 @@ class UserFragment : Fragment(), Injectable {
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
         userViewModel = ViewModelProviders.of(this, viewModelFactory)
-            .get(UserViewModel::class.java)
+                .get(UserViewModel::class.java)
 
-        userViewModel.setNickname("Scott")
+        userViewModel.setId("1")
         userViewModel.user.observeK(this) { userResource ->
-            userResource.data?.firstOrNull()?.run {
+            userResource.data?.run {
                 nickNameTextView.text = nickName
-                roleTextView.text = role
-                Picasso.get().load("https://media.notify.moe/images/avatars/large/$id.png").into(
-                    avatarImageView)
-                Picasso.get().load("https://media.notify.moe/images/covers/large/$id.jpg").into(
-                    coverImageView)
+                descriptionTextView.text = description
+
+                val birthday = DateTimeUtils.toInstant(birthdate).atZone(ZoneId.systemDefault()).toLocalDate()
+                val now = LocalDate.now()
+                ageTextView.text = Period.between(birthday, now).years.toString()
+                Picasso.get()
+                        .load("https://media.notify.moe/images/covers/large/$id.jpg")
+                        .error(R.drawable.ic_image_off_black_24dp)
+                        .into(coverImageView)
             }
-        }
-    }
-
-    companion object {
-        private const val LOGIN_KEY = "login"
-
-        fun create(login: String): UserFragment {
-            val userFragment = UserFragment()
-            val bundle = Bundle()
-            bundle.putString(LOGIN_KEY, login)
-            userFragment.arguments = bundle
-            return userFragment
         }
     }
 }

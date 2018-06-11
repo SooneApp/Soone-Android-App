@@ -10,12 +10,12 @@ import app.soulcramer.soone.vo.Resource
 import app.soulcramer.soone.vo.user.User
 import javax.inject.Inject
 
-class UserViewModel @Inject constructor(userRepository: UserRepository) : ViewModel() {
-    private val _nick = MutableLiveData<String>()
-    val nick: LiveData<String>
-        get() = _nick
-    val user: LiveData<Resource<List<User>>> = Transformations
-        .switchMap(_nick) { id ->
+class UserViewModel @Inject constructor(var userRepository: UserRepository) : ViewModel() {
+    private val _id = MutableLiveData<String>()
+    val id: LiveData<String>
+        get() = _id
+    val user: LiveData<Resource<User>> = Transformations
+            .switchMap(_id) { id ->
             if (id == null) {
                 AbsentLiveData.create()
             } else {
@@ -23,15 +23,19 @@ class UserViewModel @Inject constructor(userRepository: UserRepository) : ViewMo
             }
         }
 
-    fun setNickname(nick: String?) {
-        if (_nick.value != nick) {
-            _nick.value = nick
+    fun setId(id: String?) {
+        if (_id.value != id) {
+            _id.value = id
         }
     }
 
     fun retry() {
-        _nick.value?.let {
-            _nick.value = it
+        _id.value?.let {
+            _id.value = it
         }
+    }
+
+    fun updateUser(user: User) {
+        userRepository.upadteUser(user)
     }
 }
