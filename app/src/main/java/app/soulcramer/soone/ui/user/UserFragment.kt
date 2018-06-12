@@ -7,6 +7,7 @@ import android.support.v4.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.navigation.findNavController
 import app.soulcramer.soone.R
 import app.soulcramer.soone.common.observeK
 import app.soulcramer.soone.di.Injectable
@@ -50,6 +51,13 @@ class UserFragment : Fragment(), Injectable {
                         .load("https://media.notify.moe/images/covers/large/$id.jpg")
                         .error(R.drawable.ic_image_off_black_24dp)
                         .into(coverImageView)
+
+                editUserFab.show()
+                editUserFab.setOnClickListener {
+                    val action = UserFragmentDirections.actionEditUser(id)
+                    action.setUserId(id)
+                    it.findNavController().navigate(action)
+                }
             }
         }
     }

@@ -18,10 +18,26 @@
         android:id="@+id/profile"
         android:name="app.soulcramer.soone.ui.user.UserFragment"
         android:label="UserFragment"
-        tools:layout="@layout/fragment_user" />
+        tools:layout="@layout/fragment_user">
+        <action
+            android:id="@+id/actionEditUser"
+            app:destination="@id/editUserFragment"
+            app:enterAnim="@anim/nav_default_enter_anim"
+            app:exitAnim="@anim/nav_default_exit_anim"
+            app:popEnterAnim="@anim/nav_default_pop_enter_anim"
+            app:popExitAnim="@anim/nav_default_pop_exit_anim" />
+    </fragment>
     <fragment
         android:id="@+id/dashboard"
         android:name="app.soulcramer.soone.ui.dashboard.DashboardFragment"
         android:label="DashboardFragment"
         tools:layout="@layout/fragment_dashboard" />
+    <fragment
+        android:id="@+id/editUserFragment"
+        android:name="app.soulcramer.soone.ui.user.edit.EditUserFragment"
+        android:label="EditUserFragment">
+        <argument
+            android:name="userId"
+            app:type="string" />
+    </fragment>
 </navigation>

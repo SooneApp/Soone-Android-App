@@ -7,15 +7,11 @@ import android.support.v4.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import app.soulcramer.soone.R
 import app.soulcramer.soone.common.observeK
 import app.soulcramer.soone.di.Injectable
 import app.soulcramer.soone.ui.user.UserViewModel
-import com.squareup.picasso.Picasso
-import kotlinx.android.synthetic.main.fragment_user.*
-import org.threeten.bp.DateTimeUtils
-import org.threeten.bp.LocalDate
-import org.threeten.bp.Period
-import org.threeten.bp.ZoneId
+import kotlinx.android.synthetic.main.fragment_user_edit.*
 import javax.inject.Inject
 
 class EditUserFragment : Fragment(), Injectable {
@@ -29,7 +25,7 @@ class EditUserFragment : Fragment(), Injectable {
             container: ViewGroup?,
             savedInstanceState: Bundle?
     ): View? {
-        return inflater.inflate(R.layout.fragment_user_detail, container, false)
+        return inflater.inflate(R.layout.fragment_user_edit, container, false)
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
@@ -37,19 +33,13 @@ class EditUserFragment : Fragment(), Injectable {
         userViewModel = ViewModelProviders.of(this, viewModelFactory)
                 .get(UserViewModel::class.java)
 
-        userViewModel.setId("1")
+        val userId = EditUserFragmentArgs.fromBundle(arguments).userId
+        
+        userViewModel.setId(userId)
         userViewModel.user.observeK(this) { userResource ->
             userResource.data?.run {
-                nickNameTextView.text = nickName
-                descriptionTextView.text = description
-
-                val birthday = DateTimeUtils.toInstant(birthdate).atZone(ZoneId.systemDefault()).toLocalDate()
-                val now = LocalDate.now()
-                ageTextView.text = Period.between(birthday, now).years.toString()
-                Picasso.get()
-                        .load("https://media.notify.moe/images/covers/large/$id.jpg")
-                        .error(R.drawable.ic_image_off_black_24dp)
-                        .into(coverImageView)
+                nickNameTextInputLayout.editText?.setText(nickName)
+                descriptionTextInputLayout.editText?.setText(description)
             }
         }
     }
