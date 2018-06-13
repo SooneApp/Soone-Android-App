@@ -24,4 +24,22 @@ open class User(
         var createdAt: Date? = null,
         var updatedAt: Date? = null,
         var deletedAt: Date? = null
-) : RealmObject()
+) : RealmObject() {
+
+    fun isSameAs(user: User?): Boolean {
+        if (user == null) return false
+
+        if (id != user.id) return false
+        if (nickName != user.nickName) return false
+        if (birthdate != user.birthdate) return false
+        if (sex != user.sex) return false
+        if (sexInterest != user.sexInterest) return false
+        if (description != user.description) return false
+        if (lastSeen != user.lastSeen) return false
+        if (createdAt != user.createdAt) return false
+        if (updatedAt != user.updatedAt) return false
+        if (deletedAt != user.deletedAt) return false
+
+        return true
+    }
+}

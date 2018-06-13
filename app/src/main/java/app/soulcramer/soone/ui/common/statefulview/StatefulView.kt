@@ -1,5 +1,6 @@
 package app.soulcramer.soone.ui.common.statefulview
 
+import `fun`.soone.R
 import android.content.Context
 import android.os.Build
 import android.support.annotation.LayoutRes
@@ -11,8 +12,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.FrameLayout
-import app.soulcramer.soone.R
-import java.util.ArrayList
+import java.util.*
 
 class StatefulView : FrameLayout {
 

@@ -1,5 +1,6 @@
 package app.soulcramer.soone
 
+import `fun`.soone.BuildConfig
 import android.app.Activity
 import android.app.Application
 import android.os.StrictMode

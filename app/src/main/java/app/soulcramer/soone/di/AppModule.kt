@@ -29,7 +29,7 @@ class AppModule {
             .build()
 
         return Retrofit.Builder()
-            .baseUrl("https://soone.com/")
+                .baseUrl("http://51.38.230.10/")
             .addConverterFactory(GsonConverterFactory.create(gson))
             .addCallAdapterFactory(LiveDataCallAdapterFactory())
             .client(client)

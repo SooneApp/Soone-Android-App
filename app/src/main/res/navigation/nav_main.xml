@@ -35,9 +35,17 @@
     <fragment
         android:id="@+id/editUserFragment"
         android:name="app.soulcramer.soone.ui.user.edit.EditUserFragment"
-        android:label="EditUserFragment">
+        android:label="EditUserFragment"
+        tools:layout="@layout/fragment_user_edit">
         <argument
             android:name="userId"
             app:type="string" />
+        <action
+            android:id="@+id/actionSaveEditUser"
+            app:destination="@id/profile"
+            app:enterAnim="@anim/nav_default_enter_anim"
+            app:exitAnim="@anim/nav_default_exit_anim"
+            app:popEnterAnim="@anim/nav_default_pop_enter_anim"
+            app:popExitAnim="@anim/nav_default_pop_exit_anim" />
     </fragment>
 </navigation>

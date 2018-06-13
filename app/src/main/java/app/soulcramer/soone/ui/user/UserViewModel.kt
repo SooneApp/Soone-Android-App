@@ -37,5 +37,6 @@ class UserViewModel @Inject constructor(var userRepository: UserRepository) : Vi
 
     fun updateUser(user: User) {
         userRepository.upadteUser(user)
+        retry()
     }
 }

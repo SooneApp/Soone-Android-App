@@ -1,5 +1,6 @@
 package app.soulcramer.soone.ui
 
+import `fun`.soone.R
 import android.arch.lifecycle.ViewModelProvider
 import android.arch.lifecycle.ViewModelProviders
 import android.os.Bundle
@@ -7,7 +8,6 @@ import android.support.v4.app.Fragment
 import android.support.v7.app.AppCompatActivity
 import androidx.navigation.findNavController
 import androidx.navigation.ui.setupWithNavController
-import app.soulcramer.soone.R
 import app.soulcramer.soone.di.Injectable
 import app.soulcramer.soone.ui.user.UserViewModel
 import app.soulcramer.soone.vo.user.Sex
@@ -47,6 +47,8 @@ class HomeActivity : AppCompatActivity(), Injectable, HasSupportFragmentInjector
 
         bottomNavigationView.setupWithNavController(navController)
     }
+
+    override fun onSupportNavigateUp() = findNavController(R.id.nav_host_fragment).navigateUp()
 
     override fun supportFragmentInjector() = dispatchingAndroidInjector
 }

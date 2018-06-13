@@ -2,10 +2,7 @@ package app.soulcramer.soone.api
 
 import android.arch.lifecycle.LiveData
 import app.soulcramer.soone.vo.user.User
-import kotlinx.coroutines.experimental.Deferred
-import retrofit2.Response
-import retrofit2.http.GET
-import retrofit2.http.Path
+import retrofit2.http.*
 
 /**
  * REST API access points
@@ -18,8 +15,34 @@ interface SooneService {
     fun getUserById(@Path("userId") userId: String): LiveData<ApiResponse<User>>
 
     /**
+     * @param userPhoneNumber
+     */
+    @POST("api/user/{userPhoneNumber}")
+    fun createUser(@Path("userPhoneNumber") userPhoneNumber: String): LiveData<ApiResponse<User>>
+
+    /**
      * @param userId
      */
-    @GET("api/user/{userId}")
-    fun getUserByIdK(@Path("userId") userId: String): Deferred<Response<User>>
+    @PUT("api/user/{userId}")
+    fun updateUser(@Path("userId") userId: String): LiveData<ApiResponse<User>>
+
+
+    /**
+     * @param userId
+     */
+    @DELETE("api/user/{userId}")
+    fun deleteUser(@Path("userId") userId: String): LiveData<ApiResponse<User>>
+
+
+    /**
+     * @param userId
+     */
+    @POST("api/connect/{userId}")
+    fun connect(@Path("userId") userId: String): LiveData<ApiResponse<User>>
+
+    /**
+     * @param userId
+     */
+    @GET("api/disconnect/{userId}")
+    fun disconnect(@Path("userId") userId: String): LiveData<ApiResponse<User>>
 }

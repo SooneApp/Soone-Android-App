@@ -15,7 +15,7 @@ android {
     compileSdkVersion buildConfig.compileSdk
 
     defaultConfig {
-        applicationId "app.soulcramer.soone"
+        applicationId "fun.soone"
         minSdkVersion buildConfig.minSdk
         targetSdkVersion buildConfig.targetSdk
         versionCode 1
@@ -28,13 +28,13 @@ android {
             keyAlias 'androiddebugkey'
             keyPassword 'android'
             storePassword 'android'
-            storeFile file('../keystore/debug.keystore')
+            storeFile file('../keystore/debug/debug.keystore')
         }
         release {
-            keyAlias 'bbhotel'
-            keyPassword 'iGFPq)ywJpsp5;C7OD%0'
-            storeFile file('../keystore/release.keystore')
-            storePassword 'i61jCCE3gs22G%rvg%R5'
+            keyAlias 'androiddebugkey'
+            keyPassword 'android'
+            storePassword 'android'
+            storeFile file('../keystore/release/debug.keystore')
         }
     }
 
@@ -123,4 +123,9 @@ dependencies {
     implementation "com.github.bumptech.glide:okhttp3-integration:4.7.1"
     implementation "com.github.ajalt:timberkt:${versions.timberkt}"
 
+    implementation "com.google.firebase:firebase-core:16.0.0"
+    implementation 'com.google.firebase:firebase-messaging:17.0.0'
+
 }
+
+apply plugin: 'com.google.gms.google-services'

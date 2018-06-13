@@ -1,5 +1,6 @@
 package app.soulcramer.soone.ui.user
 
+import `fun`.soone.R
 import android.arch.lifecycle.ViewModelProvider
 import android.arch.lifecycle.ViewModelProviders
 import android.os.Bundle
@@ -8,7 +9,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.navigation.findNavController
-import app.soulcramer.soone.R
 import app.soulcramer.soone.common.observeK
 import app.soulcramer.soone.di.Injectable
 import com.squareup.picasso.Picasso
@@ -52,8 +52,8 @@ class UserFragment : Fragment(), Injectable {
                         .error(R.drawable.ic_image_off_black_24dp)
                         .into(coverImageView)
 
-                editUserFab.show()
-                editUserFab.setOnClickListener {
+                saveEditUserFab.show()
+                saveEditUserFab.setOnClickListener {
                     val action = UserFragmentDirections.actionEditUser(id)
                     action.setUserId(id)
                     it.findNavController().navigate(action)
