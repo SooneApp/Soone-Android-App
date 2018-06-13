@@ -5,6 +5,7 @@ import app.soulcramer.soone.db.UserDao
 import app.soulcramer.soone.db.userDao
 import app.soulcramer.soone.util.LiveDataCallAdapterFactory
 import com.google.gson.GsonBuilder
+import com.jakewharton.retrofit2.adapter.kotlin.coroutines.experimental.CoroutineCallAdapterFactory
 import com.zhuinden.monarchy.Monarchy
 import dagger.Module
 import dagger.Provides
@@ -29,9 +30,10 @@ class AppModule {
             .build()
 
         return Retrofit.Builder()
-                .baseUrl("http://51.38.230.10/")
+            .baseUrl("https://51.38.230.10/")
             .addConverterFactory(GsonConverterFactory.create(gson))
             .addCallAdapterFactory(LiveDataCallAdapterFactory())
+            .addCallAdapterFactory(CoroutineCallAdapterFactory())
             .client(client)
             .build()
             .create(SooneService::class.java)

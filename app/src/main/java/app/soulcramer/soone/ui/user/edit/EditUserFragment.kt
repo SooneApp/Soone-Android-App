@@ -8,11 +8,14 @@ import android.support.v4.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.AdapterView
+import android.widget.ArrayAdapter
 import androidx.navigation.findNavController
 import app.soulcramer.soone.common.afterTextChanged
 import app.soulcramer.soone.common.observeK
 import app.soulcramer.soone.di.Injectable
 import app.soulcramer.soone.ui.user.UserViewModel
+import app.soulcramer.soone.vo.user.Sex
 import app.soulcramer.soone.vo.user.User
 import kotlinx.android.synthetic.main.fragment_user_edit.*
 import javax.inject.Inject
@@ -26,11 +29,19 @@ class EditUserFragment : Fragment(), Injectable {
     private lateinit var newUser: User
 
     private var isValid = true
+        set(value) {
+            field = value
+            if (value) {
+                saveEditUserFab.show()
+            } else {
+                saveEditUserFab.hide()
+            }
+        }
 
     override fun onCreateView(
-            inflater: LayoutInflater,
-            container: ViewGroup?,
-            savedInstanceState: Bundle?
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
     ): View? {
         return inflater.inflate(R.layout.fragment_user_edit, container, false)
     }
@@ -38,7 +49,7 @@ class EditUserFragment : Fragment(), Injectable {
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
         userViewModel = ViewModelProviders.of(requireActivity(), viewModelFactory)
-                .get(UserViewModel::class.java)
+            .get(UserViewModel::class.java)
 
         val userId = EditUserFragmentArgs.fromBundle(arguments).userId
 
@@ -48,42 +59,65 @@ class EditUserFragment : Fragment(), Injectable {
                 newUser = this
                 nickNameTextInputLayout.editText?.setText(nickName)
                 descriptionTextInputLayout.editText?.setText(description)
+
+                val sexes = enumValues<Sex>()
+                    .sortedBy { it.toInt() }
+
+                val sexStrings = sexes
+                    .map { getString(it.stringRes()) }
+
+                val dataAdapter = ArrayAdapter<String>(context, android.R.layout.simple_spinner_item, sexStrings)
+                dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+
+                sexSpinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+                    override fun onNothingSelected(p0: AdapterView<*>?) {}
+
+                    override fun onItemSelected(p0: AdapterView<*>?, p1: View?, position: Int, p3: Long) {
+                        newUser.sex = position + 1
+                    }
+                }
+                sexSpinner.adapter = dataAdapter
+
+
             }
+        }
+
+        saveEditUserFab.show()
+        saveEditUserFab.setOnClickListener {
+            save(it)
         }
 
         nickNameTextInputLayout.editText?.afterTextChanged {
             nickNameTextInputLayout.editText?.error =
-                    if (it.isNotBlank()) {
-                        newUser.nickName = it.trim()
-                        isValid
-                        actionOnDifferent()
-                        null
-                    } else {
-                        "Votre pseudonyme est requis"
-                    }
+                if (it.isNotBlank()) {
+                    newUser.nickName = it.trim()
+                    isValid = true
+                    null
+                } else {
+                    isValid = false
+                    "Votre pseudonyme est requis"
+                }
         }
 
         descriptionTextInputLayout.editText?.afterTextChanged {
             nickNameTextInputLayout.editText?.error =
-                    if (it.trim().length < 500) {
-                        newUser.description = it.trim()
-                        actionOnDifferent()
-                        null
-                    } else {
-                        "La description dois faire moins de 500 characters"
-                    }
+                if (it.trim().length < 500) {
+                    newUser.description = it.trim()
+                    isValid = true
+                    null
+                } else {
+                    isValid = false
+                    "La description dois faire moins de 500 characters"
+                }
         }
 
     }
 
-    private fun actionOnDifferent() {
-        if (!newUser.isSameAs(userViewModel.user.value?.data)) {
-            saveEditUserFab.show()
-            saveEditUserFab.setOnClickListener {
-                userViewModel.updateUser(newUser)
-                val action = EditUserFragmentDirections.actionSaveEditUser()
-                it.findNavController().navigate(action)
-            }
+    private fun save(view: View) {
+        if (isValid) {
+            userViewModel.updateUser(newUser)
+            val action = EditUserFragmentDirections.actionSaveEditUser()
+            view.findNavController().navigate(action)
         }
     }
 }

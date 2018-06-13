@@ -8,6 +8,8 @@ import app.soulcramer.soone.repository.UserRepository
 import app.soulcramer.soone.util.AbsentLiveData
 import app.soulcramer.soone.vo.Resource
 import app.soulcramer.soone.vo.user.User
+import kotlinx.coroutines.experimental.android.UI
+import kotlinx.coroutines.experimental.launch
 import javax.inject.Inject
 
 class UserViewModel @Inject constructor(var userRepository: UserRepository) : ViewModel() {
@@ -16,12 +18,12 @@ class UserViewModel @Inject constructor(var userRepository: UserRepository) : Vi
         get() = _id
     val user: LiveData<Resource<User>> = Transformations
             .switchMap(_id) { id ->
-            if (id == null) {
-                AbsentLiveData.create()
-            } else {
-                userRepository.loadUserById(id)
+                if (id == null) {
+                    AbsentLiveData.create()
+                } else {
+                    userRepository.loadUserById(id)
+                }
             }
-        }
 
     fun setId(id: String?) {
         if (_id.value != id) {
@@ -36,7 +38,9 @@ class UserViewModel @Inject constructor(var userRepository: UserRepository) : Vi
     }
 
     fun updateUser(user: User) {
-        userRepository.upadteUser(user)
-        retry()
+        launch(UI) {
+            userRepository.updateUser(user).await()
+            retry()
+        }
     }
 }

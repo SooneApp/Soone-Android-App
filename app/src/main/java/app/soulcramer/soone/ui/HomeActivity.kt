@@ -35,7 +35,7 @@ class HomeActivity : AppCompatActivity(), Injectable, HasSupportFragmentInjector
         setContentView(R.layout.activity_main)
         userViewModel = ViewModelProviders.of(this, viewModelFactory)
                 .get(UserViewModel::class.java)
-        val user = User("1", "Loïc", Date(), Sex(), SexInterest(),
+        val user = User("1", "Loïc", Date(), Sex.MALE.toInt(), SexInterest(),
                 "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor"
                         + " incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco"
                         + " laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit"

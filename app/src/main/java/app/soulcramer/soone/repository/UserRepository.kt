@@ -6,6 +6,8 @@ import app.soulcramer.soone.api.SooneService
 import app.soulcramer.soone.db.UserDao
 import app.soulcramer.soone.vo.Resource
 import app.soulcramer.soone.vo.user.User
+import kotlinx.coroutines.experimental.Deferred
+import kotlinx.coroutines.experimental.async
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -27,13 +29,33 @@ class UserRepository @Inject constructor(
 
             override fun shouldFetch(data: User?) = data == null
 
-            override fun loadFromDb() = userDao.findById(id)
+            override fun loadFromDb() = userDao.findByIdAsync(id)
 
             override fun createCall() = service.getUserById(id)
         }.asLiveData()
     }
 
-    fun upadteUser(user: User) {
-        userDao.insert(user)
+    fun updateUser(user: User): Deferred<Resource<User>> {
+        return async(dispatchers.network) {
+            val updatedUser = async(dispatchers.disk) {
+                userDao.insert(user)
+                userDao.findById(user.id)
+            }.await()
+            Resource.success(updatedUser)
+            /*val response = service.updateUser(user.id, user).await()
+            when (response) {
+                is ApiSuccessResponse -> {
+                    val updatedUser = async(dispatchers.disk) {
+                        userDao.insert(response.body)
+                        userDao.findById(response.body.id)
+                    }.await()
+                    Resource.success(updatedUser)
+                }
+                is ApiErrorResponse -> {
+                    Resource.error(response.errorMessage, null)
+                }
+                is ApiEmptyResponse -> Resource.success(null)
+            }*/
+        }
     }
 }

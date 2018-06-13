@@ -13,7 +13,7 @@ import app.soulcramer.soone.vo.Resource
 import kotlinx.coroutines.experimental.launch
 
 /**
- * A generic class that can provide a resource backed by both the sqlite database and the network.
+ * A generic class that can provide a resource backed by both the realm database and the network.
  *
  *
  * You can read more about it in the [Architecture

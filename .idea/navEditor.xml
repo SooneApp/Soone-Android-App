@@ -31,7 +31,7 @@
                         </option>
                         <option name="myPositions">
                           <map>
-                            <entry key="action_editUserFragment_to_profile">
+                            <entry key="actionSaveEditUser">
                               <value>
                                 <LayoutPositions />
                               </value>

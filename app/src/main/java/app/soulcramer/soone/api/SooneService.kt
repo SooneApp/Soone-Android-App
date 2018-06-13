@@ -2,6 +2,7 @@ package app.soulcramer.soone.api
 
 import android.arch.lifecycle.LiveData
 import app.soulcramer.soone.vo.user.User
+import kotlinx.coroutines.experimental.Deferred
 import retrofit2.http.*
 
 /**
@@ -24,7 +25,7 @@ interface SooneService {
      * @param userId
      */
     @PUT("api/user/{userId}")
-    fun updateUser(@Path("userId") userId: String): LiveData<ApiResponse<User>>
+    fun updateUser(@Path("userId") userId: String, @Body user: User): Deferred<ApiResponse<User>>
 
 
     /**

@@ -1,4 +1,4 @@
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools" tools:locale="fr">
     <string name="app_name">Soone</string>
 
     <string name="tab.myprofile.title">My profile</string>
@@ -9,5 +9,9 @@
     <string name="common.error.no_result">No result</string>
     <string name="network.no_connection.error.title">No connexion</string>
     <string name="network.no_connection.error.description">We\'re not able to connect to the server, do you have internet?</string>
-    <string name="cd_user_image">user image</string>
+    <string name="cd_user_image">image utilisateur</string>
+    <string name="sex.male">Homme</string>
+    <string name="sex.female">Femme</string>
+    <string name="sex.other">Autres</string>
+    <string name="user.description.empty">Description non rempli.</string>
 </resources>

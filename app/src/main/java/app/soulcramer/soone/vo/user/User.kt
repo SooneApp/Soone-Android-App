@@ -10,21 +10,27 @@ import java.util.*
 
 @RealmClass
 open class User(
-        @field:PrimaryKey
-        @field:Required
-        var id: String = "",
-        @field:SerializedName("nick")
-        @field:Index
-        var nickName: String = "",
-        var birthdate: Date? = null,
-        var sex: Sex? = null,
-        var sexInterest: SexInterest? = null,
-        var description: String = "",
-        var lastSeen: Date? = null,
-        var createdAt: Date? = null,
-        var updatedAt: Date? = null,
-        var deletedAt: Date? = null
+    @field:PrimaryKey
+    @field:Required
+    var id: String = "",
+    @field:SerializedName("nick")
+    @field:Index
+    var nickName: String = "",
+    var birthdate: Date? = null,
+    var sex: Int = 0,
+    var sexInterest: SexInterest? = null,
+    var description: String = "",
+    var lastSeen: Date? = null,
+    var createdAt: Date? = null,
+    var updatedAt: Date? = null,
+    var deletedAt: Date? = null
 ) : RealmObject() {
+
+    fun getSexEnum(): Sex = Sex.fromInt(sex)
+
+    fun setSexEnum(sex: Sex) {
+        this.sex = sex.toInt()
+    }
 
     fun isSameAs(user: User?): Boolean {
         if (user == null) return false
