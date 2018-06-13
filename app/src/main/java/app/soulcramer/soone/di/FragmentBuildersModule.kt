@@ -1,5 +1,6 @@
 package app.soulcramer.soone.di
 
+import app.soulcramer.soone.ui.contact.ContactFragment
 import app.soulcramer.soone.ui.dashboard.DashboardFragment
 import app.soulcramer.soone.ui.settings.SettingsFragment
 import app.soulcramer.soone.ui.user.UserFragment
@@ -21,4 +22,7 @@ abstract class FragmentBuildersModule {
 
     @ContributesAndroidInjector
     abstract fun contributeEditUserFragment(): EditUserFragment
+
+    @ContributesAndroidInjector
+    abstract fun contributeContactFragment(): ContactFragment
 }

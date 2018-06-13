@@ -6,6 +6,10 @@
         android:icon="@drawable/ic_view_list_black_24dp"
         android:title="dashboard" />
     <item
+        android:id="@id/contact"
+        android:icon="@drawable/ic_contact_black_24dp"
+        android:title="contact" />
+    <item
         android:id="@id/profile"
         android:icon="@drawable/ic_person_outline_black_24dp"
         android:title="profile" />
