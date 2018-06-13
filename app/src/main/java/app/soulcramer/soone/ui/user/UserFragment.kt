@@ -14,10 +14,10 @@ import app.soulcramer.soone.di.Injectable
 import app.soulcramer.soone.vo.user.Sex
 import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.fragment_user.*
-import org.threeten.bp.DateTimeUtils
 import org.threeten.bp.LocalDate
 import org.threeten.bp.Period
 import org.threeten.bp.ZoneId
+import org.threeten.bp.format.DateTimeFormatter
 import javax.inject.Inject
 
 class UserFragment : Fragment(), Injectable {
@@ -53,8 +53,8 @@ class UserFragment : Fragment(), Injectable {
                 }
 
                 sexTextView.text = getString(Sex.fromInt(sex).stringRes())
-
-                val birthday = DateTimeUtils.toInstant(birthdate).atZone(ZoneId.systemDefault()).toLocalDate()
+                val date = LocalDate.parse(birthdate, DateTimeFormatter.ISO_LOCAL_DATE)
+                val birthday = date.atStartOfDay(ZoneId.systemDefault()).toLocalDate()
                 val now = LocalDate.now()
                 ageTextView.text = Period.between(birthday, now).years.toString()
                 Picasso.get()

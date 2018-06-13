@@ -6,7 +6,6 @@ import io.realm.annotations.Index
 import io.realm.annotations.PrimaryKey
 import io.realm.annotations.RealmClass
 import io.realm.annotations.Required
-import java.util.*
 
 @RealmClass
 open class User(
@@ -16,14 +15,14 @@ open class User(
     @field:SerializedName("nick")
     @field:Index
     var nickName: String = "",
-    var birthdate: Date? = null,
+    var birthdate: String = "",
     var sex: Int = 0,
     var sexInterest: SexInterest? = null,
     var description: String = "",
-    var lastSeen: Date? = null,
-    var createdAt: Date? = null,
-    var updatedAt: Date? = null,
-    var deletedAt: Date? = null
+    var lastSeen: String = "",
+    var createdAt: String = "",
+    var updatedAt: String = "",
+    var deletedAt: String? = null
 ) : RealmObject() {
 
     fun getSexEnum(): Sex = Sex.fromInt(sex)

@@ -1,6 +1,7 @@
 package app.soulcramer.soone.ui.user.edit
 
 import `fun`.soone.R
+import android.app.DatePickerDialog
 import android.arch.lifecycle.ViewModelProvider
 import android.arch.lifecycle.ViewModelProviders
 import android.os.Bundle
@@ -18,6 +19,8 @@ import app.soulcramer.soone.ui.user.UserViewModel
 import app.soulcramer.soone.vo.user.Sex
 import app.soulcramer.soone.vo.user.User
 import kotlinx.android.synthetic.main.fragment_user_edit.*
+import org.threeten.bp.LocalDate
+import org.threeten.bp.format.DateTimeFormatter
 import javax.inject.Inject
 
 class EditUserFragment : Fragment(), Injectable {
@@ -27,6 +30,7 @@ class EditUserFragment : Fragment(), Injectable {
     private lateinit var userViewModel: UserViewModel
 
     private lateinit var newUser: User
+    private lateinit var datePickerDialog: DatePickerDialog
 
     private var isValid = true
         set(value) {
@@ -52,35 +56,6 @@ class EditUserFragment : Fragment(), Injectable {
             .get(UserViewModel::class.java)
 
         val userId = EditUserFragmentArgs.fromBundle(arguments).userId
-
-        userViewModel.setId(userId)
-        userViewModel.user.observeK(this) { userResource ->
-            userResource.data?.run {
-                newUser = this
-                nickNameTextInputLayout.editText?.setText(nickName)
-                descriptionTextInputLayout.editText?.setText(description)
-
-                val sexes = enumValues<Sex>()
-                    .sortedBy { it.toInt() }
-
-                val sexStrings = sexes
-                    .map { getString(it.stringRes()) }
-
-                val dataAdapter = ArrayAdapter<String>(context, android.R.layout.simple_spinner_item, sexStrings)
-                dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
-
-                sexSpinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
-                    override fun onNothingSelected(p0: AdapterView<*>?) {}
-
-                    override fun onItemSelected(p0: AdapterView<*>?, p1: View?, position: Int, p3: Long) {
-                        newUser.sex = position + 1
-                    }
-                }
-                sexSpinner.adapter = dataAdapter
-
-
-            }
-        }
 
         saveEditUserFab.show()
         saveEditUserFab.setOnClickListener {
@@ -109,6 +84,51 @@ class EditUserFragment : Fragment(), Injectable {
                     isValid = false
                     "La description dois faire moins de 500 characters"
                 }
+        }
+
+        userViewModel.setId(userId)
+        userViewModel.user.observeK(this) { userResource ->
+            userResource.data?.run {
+                newUser = this
+                nickNameTextInputLayout.editText?.setText(nickName)
+                descriptionTextInputLayout.editText?.setText(description)
+
+                val sexes = enumValues<Sex>()
+                    .sortedBy { it.toInt() }
+
+                val sexStrings = sexes
+                    .map { getString(it.stringRes()) }
+
+                val dataAdapter = ArrayAdapter<String>(context, android.R.layout.simple_spinner_item, sexStrings)
+                dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+
+                sexSpinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+                    override fun onNothingSelected(p0: AdapterView<*>?) {}
+
+                    override fun onItemSelected(p0: AdapterView<*>?, p1: View?, position: Int, p3: Long) {
+                        newUser.sex = position + 1
+                    }
+                }
+                sexSpinner.adapter = dataAdapter
+
+                val date = LocalDate.parse(birthdate, DateTimeFormatter.ISO_LOCAL_DATE)
+                birthdateTextInputLayout.editText?.setText(date.format(DateTimeFormatter.ISO_DATE))
+
+
+                datePickerDialog = DatePickerDialog(context, { _, year, month, dayOfMonth ->
+                    val newUserDate = LocalDate.of(year, month, dayOfMonth)
+                    newUser.birthdate = newUserDate.format(DateTimeFormatter.ISO_LOCAL_DATE)
+                    birthdateTextInputLayout.editText?.setText(newUserDate.format(DateTimeFormatter.ISO_DATE))
+
+                }, date.year, date.month.value, date.dayOfMonth)
+
+                birthdateTextInputLayout.editText?.setOnTouchListener { _, _ ->
+                    datePickerDialog.show()
+                    false
+                }
+
+
+            }
         }
 
     }
