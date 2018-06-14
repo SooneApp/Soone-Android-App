@@ -4,7 +4,7 @@ buildscript {
 
     ext.versions = [
             'appcompat'                     : '1.0.0-alpha1',
-            'android_gradle'                : '3.2.0-alpha17',
+            'android_gradle'                : '3.2.0-alpha18',
             'arch'                          : '1.1.0',
             'browser'                       : '1.0.0-alpha1',
             'constraint_layout'             : '1.1.0',
@@ -15,7 +15,7 @@ buildscript {
             'fast_adaper'                   : '3.2.5',
             'glide'                         : '4.7.1',
             'jfrog'                         : '4.7.1',
-            'kotlin'                        : '1.2.41',
+            'kotlin'                        : '1.2.50',
             'ktlint'                        : '0.22.0',
             'leakcanary'                    : '1.5.4',
             'lifecycle'                     : '1.1.1',
@@ -43,7 +43,7 @@ buildscript {
         maven { url 'https://maven.fabric.io/public' }
     }
     dependencies {
-        classpath "com.android.tools.build:gradle:3.2.0-alpha18"
+        classpath "com.android.tools.build:gradle:${versions.android_gradle}"
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:${versions.kotlin}"
         classpath "org.jetbrains.kotlin:kotlin-android-extensions:${versions.kotlin}"
         classpath 'com.getkeepsafe.dexcount:dexcount-gradle-plugin:0.8.2'

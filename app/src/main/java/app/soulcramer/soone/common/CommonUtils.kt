@@ -28,3 +28,6 @@ fun EditText.validate(message: String, validator: (String) -> Boolean) {
     }
     this.error = if (validator(this.text.toString())) null else message
 }
+
+fun ClosedRange<Long>.random() =
+    start + ((endInclusive - start) * Math.random()).toLong()

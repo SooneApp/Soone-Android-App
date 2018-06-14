@@ -12,20 +12,20 @@ interface SooneService {
     /**
      * @param userId
      */
-    @GET("api/user/{userId}")
-    fun getUserById(@Path("userId") userId: String): LiveData<ApiResponse<User>>
+    @GET("api/user")
+    fun getUserById(@Query("id") userId: String): LiveData<ApiResponse<User>>
 
     /**
      * @param userPhoneNumber
      */
-    @POST("api/user/{userPhoneNumber}")
-    fun createUser(@Path("userPhoneNumber") userPhoneNumber: String): LiveData<ApiResponse<User>>
+    @POST("api/user")
+    fun createUser(@Query("phoneNumber") userPhoneNumber: String): Deferred<User>
 
     /**
      * @param userId
      */
-    @PUT("api/user/{userId}")
-    fun updateUser(@Path("userId") userId: String, @Body user: User): Deferred<ApiResponse<User>>
+    @PUT("api/user")
+    fun updateUser(@Query("id") userId: String, @Body user: User): Deferred<User>
 
 
     /**
@@ -38,8 +38,11 @@ interface SooneService {
     /**
      * @param userId
      */
-    @POST("api/connect/{userId}")
-    fun connect(@Path("userId") userId: String): LiveData<ApiResponse<User>>
+    @POST("api/connect")
+    fun connect(
+        @Query("phoneNumber") phoneNumber: String,
+        @Query("appToken") token: String?
+    ): Deferred<User>
 
     /**
      * @param userId

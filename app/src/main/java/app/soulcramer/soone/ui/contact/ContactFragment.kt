@@ -24,6 +24,7 @@ class ContactFragment : Fragment(), Injectable {
     lateinit var viewModelFactory: ViewModelProvider.Factory
 
     private lateinit var userViewModel: UserViewModel
+    private lateinit var contactsViewModel: ContactsViewModel
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -35,8 +36,10 @@ class ContactFragment : Fragment(), Injectable {
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-        userViewModel = ViewModelProviders.of(this, viewModelFactory)
+        userViewModel = ViewModelProviders.of(requireActivity(), viewModelFactory)
             .get(UserViewModel::class.java)
+        contactsViewModel = ViewModelProviders.of(this, viewModelFactory)
+            .get(ContactsViewModel::class.java)
 
         val itemAdapter = ItemAdapter<ContactItem>()
         val fastAdapter = FastAdapter.with<ContactItem, ItemAdapter<ContactItem>>(itemAdapter).apply {

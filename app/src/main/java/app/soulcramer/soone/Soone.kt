@@ -3,7 +3,6 @@ package app.soulcramer.soone
 import `fun`.soone.BuildConfig
 import android.app.Activity
 import android.app.Application
-import android.os.StrictMode
 import app.soulcramer.soone.di.AppInjector
 import com.github.ajalt.timberkt.Timber
 import com.jakewharton.threetenabp.AndroidThreeTen
@@ -25,7 +24,7 @@ class Soone : Application(), HasActivityInjector {
 
         if (BuildConfig.DEBUG) {
             Timber.plant(Timber.DebugTree())
-            StrictMode.setThreadPolicy(StrictMode.ThreadPolicy.Builder()
+            /*StrictMode.setThreadPolicy(StrictMode.ThreadPolicy.Builder()
                 .detectAll()
                 .penaltyLog()
                 .build()
@@ -34,7 +33,7 @@ class Soone : Application(), HasActivityInjector {
                 .detectAll()
                 .penaltyLog()
                 .build()
-            )
+            )*/
         }
     }
 

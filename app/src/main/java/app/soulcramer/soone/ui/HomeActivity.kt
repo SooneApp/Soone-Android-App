@@ -8,16 +8,12 @@ import android.support.v4.app.Fragment
 import android.support.v7.app.AppCompatActivity
 import androidx.navigation.findNavController
 import androidx.navigation.ui.setupWithNavController
+import app.soulcramer.soone.common.random
 import app.soulcramer.soone.di.Injectable
 import app.soulcramer.soone.ui.user.UserViewModel
-import app.soulcramer.soone.vo.user.Sex
-import app.soulcramer.soone.vo.user.SexInterest
-import app.soulcramer.soone.vo.user.User
 import dagger.android.DispatchingAndroidInjector
 import dagger.android.support.HasSupportFragmentInjector
 import kotlinx.android.synthetic.main.activity_main.*
-import org.threeten.bp.LocalDate
-import org.threeten.bp.format.DateTimeFormatter
 import javax.inject.Inject
 
 class HomeActivity : AppCompatActivity(), Injectable, HasSupportFragmentInjector {
@@ -35,18 +31,9 @@ class HomeActivity : AppCompatActivity(), Injectable, HasSupportFragmentInjector
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         userViewModel = ViewModelProviders.of(this, viewModelFactory)
-                .get(UserViewModel::class.java)
-        val birthdate = LocalDate.of(1995, 1, 1).format(DateTimeFormatter.ISO_LOCAL_DATE)
-        val now = LocalDate.now().format(DateTimeFormatter.ISO_LOCAL_DATE)
-        val user = User("1", "Loïc", birthdate, Sex.MALE.toInt(), SexInterest(),
-                "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor"
-                        + " incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco"
-                        + " laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit"
-                        + " in voluptate velit esse cillum dolore eu fugiat nulla pariatur."
-                        + " Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum."
-            , now, now, now, now)
-        userViewModel.updateUser(user)
-        userViewModel.setId(user.id)
+            .get(UserViewModel::class.java)
+
+        userViewModel.createUser((1111111111..9999999999).random().toString())
 
         bottomNavigationView.setupWithNavController(navController)
     }

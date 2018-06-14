@@ -6,8 +6,10 @@ import app.soulcramer.soone.api.SooneService
 import app.soulcramer.soone.db.UserDao
 import app.soulcramer.soone.vo.Resource
 import app.soulcramer.soone.vo.user.User
+import com.google.firebase.iid.FirebaseInstanceId
 import kotlinx.coroutines.experimental.Deferred
 import kotlinx.coroutines.experimental.async
+import kotlinx.coroutines.experimental.withContext
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -35,27 +37,25 @@ class UserRepository @Inject constructor(
         }.asLiveData()
     }
 
+    fun createUser(phoneNumber: String): Deferred<User?> {
+        return async(dispatchers.network) {
+            service.createUser(phoneNumber).await()
+            service.connect(phoneNumber, FirebaseInstanceId.getInstance().token).await()
+        }
+    }
+
     fun updateUser(user: User): Deferred<Resource<User>> {
         return async(dispatchers.network) {
-            val updatedUser = async(dispatchers.disk) {
-                userDao.insert(user)
-                userDao.findById(user.id)
-            }.await()
-            Resource.success(updatedUser)
-            /*val response = service.updateUser(user.id, user).await()
-            when (response) {
-                is ApiSuccessResponse -> {
-                    val updatedUser = async(dispatchers.disk) {
-                        userDao.insert(response.body)
-                        userDao.findById(response.body.id)
-                    }.await()
-                    Resource.success(updatedUser)
+            try {
+                val response = service.updateUser(user.id, user).await()
+                val updatedUser = withContext(dispatchers.disk) {
+                    userDao.insert(response)
+                    userDao.findById(response.id)
                 }
-                is ApiErrorResponse -> {
-                    Resource.error(response.errorMessage, null)
-                }
-                is ApiEmptyResponse -> Resource.success(null)
-            }*/
+                Resource.success(updatedUser)
+            } catch (exception: Exception) {
+                Resource.error(exception.message ?: "", null)
+            }
         }
     }
 }

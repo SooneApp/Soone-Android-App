@@ -4,7 +4,6 @@ import app.soulcramer.soone.api.SooneService
 import app.soulcramer.soone.db.UserDao
 import app.soulcramer.soone.db.userDao
 import app.soulcramer.soone.util.LiveDataCallAdapterFactory
-import com.google.gson.GsonBuilder
 import com.jakewharton.retrofit2.adapter.kotlin.coroutines.experimental.CoroutineCallAdapterFactory
 import com.zhuinden.monarchy.Monarchy
 import dagger.Module
@@ -22,16 +21,15 @@ class AppModule {
     @Singleton
     @Provides
     fun provideGithubService(): SooneService {
-        val gson = GsonBuilder().create()
         val logging = HttpLoggingInterceptor()
         logging.level = HttpLoggingInterceptor.Level.BODY
         val client = OkHttpClient.Builder()
-            // .addInterceptor(logging)
+            .addInterceptor(logging)
             .build()
 
         return Retrofit.Builder()
-            .baseUrl("https://51.38.230.10/")
-            .addConverterFactory(GsonConverterFactory.create(gson))
+            .baseUrl("https://soone.fun:1337/")
+            .addConverterFactory(GsonConverterFactory.create())
             .addCallAdapterFactory(LiveDataCallAdapterFactory())
             .addCallAdapterFactory(CoroutineCallAdapterFactory())
             .client(client)
