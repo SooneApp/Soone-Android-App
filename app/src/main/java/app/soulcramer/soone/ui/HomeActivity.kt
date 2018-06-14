@@ -8,7 +8,6 @@ import android.support.v4.app.Fragment
 import android.support.v7.app.AppCompatActivity
 import androidx.navigation.findNavController
 import androidx.navigation.ui.setupWithNavController
-import app.soulcramer.soone.common.random
 import app.soulcramer.soone.di.Injectable
 import app.soulcramer.soone.ui.user.UserViewModel
 import dagger.android.DispatchingAndroidInjector
@@ -33,7 +32,7 @@ class HomeActivity : AppCompatActivity(), Injectable, HasSupportFragmentInjector
         userViewModel = ViewModelProviders.of(this, viewModelFactory)
             .get(UserViewModel::class.java)
 
-        userViewModel.createUser((1111111111..9999999999).random().toString())
+        userViewModel.setId("d344d15f-0721-48cc-a113-a7243307e84")
 
         bottomNavigationView.setupWithNavController(navController)
     }

@@ -3,6 +3,7 @@ package app.soulcramer.soone
 import `fun`.soone.BuildConfig
 import android.app.Activity
 import android.app.Application
+import android.content.Context
 import app.soulcramer.soone.di.AppInjector
 import com.github.ajalt.timberkt.Timber
 import com.jakewharton.threetenabp.AndroidThreeTen
@@ -18,6 +19,7 @@ class Soone : Application(), HasActivityInjector {
 
     override fun onCreate() {
         super.onCreate()
+        instance = this
         Monarchy.init(this)
         AppInjector.init(this)
         AndroidThreeTen.init(this)
@@ -37,5 +39,10 @@ class Soone : Application(), HasActivityInjector {
         }
     }
 
+
     override fun activityInjector() = dispatchingAndroidInjector
+
+    companion object {
+        lateinit var instance: Context
+    }
 }

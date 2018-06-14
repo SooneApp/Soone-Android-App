@@ -47,7 +47,7 @@ class UserViewModel @Inject constructor(var userRepository: UserRepository) : Vi
             val now = LocalDate.now().format(DateTimeFormatter.ISO_LOCAL_DATE)
             newUser.apply {
                 nickName = "Loïc"
-                this.birthdate = birthdate
+                this.birthDate = birthdate
                 sex = Sex.MALE.toInt()
                 description = """Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor
                  incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco
@@ -63,7 +63,8 @@ class UserViewModel @Inject constructor(var userRepository: UserRepository) : Vi
 
     fun updateUser(user: User) {
         launch(UI) {
-            retry()
+            userRepository.updateUser(user).await()
+            setId(user.id)
         }
     }
 }

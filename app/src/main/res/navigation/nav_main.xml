@@ -51,5 +51,30 @@
     <fragment
         android:id="@+id/contact"
         android:name="app.soulcramer.soone.ui.contact.ContactFragment"
-        android:label="ContactFragment" />
+        android:label="ContactFragment"
+        tools:layout="@layout/fragment_contacts">
+        <action
+            android:id="@+id/action_contact_to_profile"
+            app:destination="@id/profile" />
+        <action
+            android:id="@+id/action_contact_to_chatFragment"
+            app:destination="@id/chatFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/chatFragment"
+        android:name="app.soulcramer.soone.ui.contact.chat.ChatFragment"
+        android:label="ChatFragment"
+        tools:layout="@layout/fragment_chat">
+        <action
+            android:id="@+id/action_chatFragment_to_matchFragment"
+            app:destination="@id/matchFragment" />
+        <action
+            android:id="@+id/action_chatFragment_to_profile"
+            app:destination="@id/profile" />
+    </fragment>
+    <fragment
+        android:id="@+id/matchFragment"
+        android:name="app.soulcramer.soone.ui.contact.chat.match.MatchFragment"
+        android:label="MatchFragment"
+        tools:layout="@layout/fragment_match" />
 </navigation>

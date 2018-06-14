@@ -36,13 +36,12 @@ class UserFragment : Fragment(), Injectable {
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-        userViewModel = ViewModelProviders.of(this, viewModelFactory)
+        userViewModel = ViewModelProviders.of(requireActivity(), viewModelFactory)
             .get(UserViewModel::class.java)
 
-        userViewModel.setId("1")
         userViewModel.user.observeK(this) { userResource ->
             userResource.data?.run {
-                nickNameTextView.text = nickName
+                nickNameTextView.text = nickName.capitalize()
 
                 if (description.isEmpty()) {
                     descriptionTextView.text = getString(R.string.user_description_empty)
@@ -53,10 +52,13 @@ class UserFragment : Fragment(), Injectable {
                 }
 
                 sexTextView.text = getString(Sex.fromInt(sex).stringRes())
-                val date = LocalDate.parse(birthdate, DateTimeFormatter.ISO_LOCAL_DATE)
-                val birthday = date.atStartOfDay(ZoneId.systemDefault()).toLocalDate()
-                val now = LocalDate.now()
-                ageTextView.text = Period.between(birthday, now).years.toString()
+
+                if (birthDate.isNotEmpty()) {
+                    val date = LocalDate.parse(birthDate, DateTimeFormatter.ISO_OFFSET_DATE_TIME)
+                    val birthday = date.atStartOfDay(ZoneId.systemDefault()).toLocalDate()
+                    val now = LocalDate.now()
+                    ageTextView.text = Period.between(birthday, now).years.toString()
+                }
                 Picasso.get()
                     .load("https://media.notify.moe/images/covers/large/$id.jpg")
                     .error(R.drawable.ic_image_off_black_24dp)
@@ -70,5 +72,6 @@ class UserFragment : Fragment(), Injectable {
                 }
             }
         }
+//        userViewModel.retry()
     }
 }

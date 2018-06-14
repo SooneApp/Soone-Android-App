@@ -20,6 +20,8 @@ import app.soulcramer.soone.vo.user.Sex
 import app.soulcramer.soone.vo.user.User
 import kotlinx.android.synthetic.main.fragment_user_edit.*
 import org.threeten.bp.LocalDate
+import org.threeten.bp.OffsetDateTime
+import org.threeten.bp.ZoneOffset
 import org.threeten.bp.format.DateTimeFormatter
 import javax.inject.Inject
 
@@ -111,13 +113,14 @@ class EditUserFragment : Fragment(), Injectable {
                 }
                 sexSpinner.adapter = dataAdapter
 
-                val date = LocalDate.parse(birthdate, DateTimeFormatter.ISO_LOCAL_DATE)
+                val date = LocalDate.parse(birthDate, DateTimeFormatter.ISO_DATE_TIME)
                 birthdateTextInputLayout.editText?.setText(date.format(DateTimeFormatter.ISO_DATE))
 
 
                 datePickerDialog = DatePickerDialog(context, { _, year, month, dayOfMonth ->
-                    val newUserDate = LocalDate.of(year, month, dayOfMonth)
-                    newUser.birthdate = newUserDate.format(DateTimeFormatter.ISO_LOCAL_DATE)
+                    val newUserDate =
+                        OffsetDateTime.of(year, month, dayOfMonth, 0, 0, 0, 0, ZoneOffset.UTC)
+                    newUser.birthDate = newUserDate.format(DateTimeFormatter.ISO_OFFSET_DATE_TIME)
                     birthdateTextInputLayout.editText?.setText(newUserDate.format(DateTimeFormatter.ISO_DATE))
 
                 }, date.year, date.month.value, date.dayOfMonth)

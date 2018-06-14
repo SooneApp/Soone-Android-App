@@ -1,9 +1,13 @@
 package app.soulcramer.soone.di
 
+import app.soulcramer.soone.Soone
 import app.soulcramer.soone.api.SooneService
 import app.soulcramer.soone.db.UserDao
 import app.soulcramer.soone.db.userDao
 import app.soulcramer.soone.util.LiveDataCallAdapterFactory
+import com.franmontiel.persistentcookiejar.PersistentCookieJar
+import com.franmontiel.persistentcookiejar.cache.SetCookieCache
+import com.franmontiel.persistentcookiejar.persistence.SharedPrefsCookiePersistor
 import com.jakewharton.retrofit2.adapter.kotlin.coroutines.experimental.CoroutineCallAdapterFactory
 import com.zhuinden.monarchy.Monarchy
 import dagger.Module
@@ -15,15 +19,20 @@ import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import javax.inject.Singleton
 
+
 @Module(includes = [ViewModelModule::class])
 class AppModule {
 
     @Singleton
     @Provides
     fun provideGithubService(): SooneService {
+
+
         val logging = HttpLoggingInterceptor()
         logging.level = HttpLoggingInterceptor.Level.BODY
+        val cookieJar = PersistentCookieJar(SetCookieCache(), SharedPrefsCookiePersistor(Soone.instance))
         val client = OkHttpClient.Builder()
+            .cookieJar(cookieJar)
             .addInterceptor(logging)
             .build()
 
