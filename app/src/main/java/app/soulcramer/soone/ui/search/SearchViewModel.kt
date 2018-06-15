@@ -1,4 +1,4 @@
-package app.soulcramer.soone.ui.dashboard
+package app.soulcramer.soone.ui.search
 
 import android.arch.lifecycle.LiveData
 import android.arch.lifecycle.MutableLiveData
@@ -10,7 +10,7 @@ import app.soulcramer.soone.vo.Resource
 import app.soulcramer.soone.vo.user.User
 import javax.inject.Inject
 
-class DashboardViewModel @Inject constructor(userRepository: UserRepository) : ViewModel() {
+class SearchViewModel @Inject constructor(userRepository: UserRepository) : ViewModel() {
     private val _nick = MutableLiveData<String>()
     val nick: LiveData<String>
         get() = _nick

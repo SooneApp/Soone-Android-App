@@ -2,19 +2,15 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
 
     <item
-        android:id="@id/dashboard"
-        android:icon="@drawable/ic_view_list_black_24dp"
-        android:title="dashboard" />
+        android:id="@id/search"
+        android:icon="@drawable/ic_search_black_24dp"
+        android:title="Recherche" />
     <item
         android:id="@id/contact"
         android:icon="@drawable/ic_contact_black_24dp"
-        android:title="contact" />
+        android:title="Contacts" />
     <item
         android:id="@id/profile"
         android:icon="@drawable/ic_person_outline_black_24dp"
-        android:title="profile" />
-    <item
-        android:id="@id/settings"
-        android:icon="@drawable/ic_settings_black_24dp"
-        android:title="Settings" />
+        android:title="Profile" />
 </menu>

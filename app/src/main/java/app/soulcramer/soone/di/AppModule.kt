@@ -1,13 +1,9 @@
 package app.soulcramer.soone.di
 
-import app.soulcramer.soone.Soone
 import app.soulcramer.soone.api.SooneService
 import app.soulcramer.soone.db.UserDao
 import app.soulcramer.soone.db.userDao
 import app.soulcramer.soone.util.LiveDataCallAdapterFactory
-import com.franmontiel.persistentcookiejar.PersistentCookieJar
-import com.franmontiel.persistentcookiejar.cache.SetCookieCache
-import com.franmontiel.persistentcookiejar.persistence.SharedPrefsCookiePersistor
 import com.jakewharton.retrofit2.adapter.kotlin.coroutines.experimental.CoroutineCallAdapterFactory
 import com.zhuinden.monarchy.Monarchy
 import dagger.Module
@@ -30,9 +26,7 @@ class AppModule {
 
         val logging = HttpLoggingInterceptor()
         logging.level = HttpLoggingInterceptor.Level.BODY
-        val cookieJar = PersistentCookieJar(SetCookieCache(), SharedPrefsCookiePersistor(Soone.instance))
         val client = OkHttpClient.Builder()
-            .cookieJar(cookieJar)
             .addInterceptor(logging)
             .build()
 
@@ -53,15 +47,15 @@ class AppModule {
     @Provides
     @Singleton
     fun realmConfiguration(): RealmConfiguration {
-        return RealmConfiguration.Builder() //
+        return RealmConfiguration.Builder()
             .deleteRealmIfMigrationNeeded().build()
     }
 
     @Provides
     @Singleton
     fun monarchy(realmConfiguration: RealmConfiguration): Monarchy {
-        return Monarchy.Builder() //
-            .setRealmConfiguration(realmConfiguration) //
+        return Monarchy.Builder()
+            .setRealmConfiguration(realmConfiguration)
             .build()
     }
 }

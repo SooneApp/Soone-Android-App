@@ -1,85 +1,94 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.design.widget.CoordinatorLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context="app.soulcramer.soone.ui.HomeActivity">
 
-    <android.support.v4.widget.NestedScrollView
+    <app.soulcramer.soone.ui.common.statefulview.StatefulView
+        android:id="@+id/statefulView"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:fillViewport="true">
+        android:layout_height="match_parent">
 
-        <android.support.constraint.ConstraintLayout
+
+        <android.support.v4.widget.NestedScrollView
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="match_parent"
+            android:fillViewport="true">
 
-            <ImageView
-                android:id="@+id/coverImageView"
-                android:layout_width="0dp"
-                android:layout_height="0dp"
-                android:contentDescription="@string/cd_user_image"
-                android:scaleType="centerCrop"
-                app:layout_constraintDimensionRatio="21:9"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                tools:srcCompat="@tools:sample/backgrounds/scenic" />
+            <android.support.constraint.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
 
-            <TextView
-                android:id="@+id/nickNameTextView"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="16dp"
-                android:layout_marginTop="16dp"
-                android:textAppearance="@style/TextAppearance.NotifyMoe.Headline4"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/coverImageView"
-                tools:text="@tools:sample/first_names" />
+                <ImageView
+                    android:id="@+id/coverImageView"
+                    android:layout_width="0dp"
+                    android:layout_height="0dp"
+                    android:background="@color/trans_gray_de"
+                    android:contentDescription="@string/cd_user_image"
+                    android:scaleType="fitCenter"
+                    app:layout_constraintDimensionRatio="21:9"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    tools:srcCompat="@tools:sample/backgrounds/scenic" />
 
-            <TextView
-                android:id="@+id/ageTextView"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="8dp"
-                android:fontFeatureSettings="onum, smcp"
-                android:textAppearance="@style/TextAppearance.NotifyMoe.Headline5"
-                app:layout_constraintBaseline_toBaselineOf="@+id/nickNameTextView"
-                app:layout_constraintStart_toEndOf="@+id/nickNameTextView"
-                tools:text="23" />
+                <TextView
+                    android:id="@+id/nickNameTextView"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginTop="16dp"
+                    android:textAppearance="@style/TextAppearance.NotifyMoe.Headline4"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/coverImageView"
+                    tools:text="@tools:sample/first_names" />
 
-            <TextView
-                android:id="@+id/descriptionTextView"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="16dp"
-                android:layout_marginTop="16dp"
-                android:layout_marginEnd="16dp"
-                android:layout_marginBottom="8dp"
-                android:textAppearance="@style/TextAppearance.NotifyMoe.Body1"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.49"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/sexTextView"
-                app:layout_constraintVertical_bias="0.0"
-                tools:text="@tools:sample/lorem/random" />
+                <TextView
+                    android:id="@+id/ageTextView"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="8dp"
+                    android:fontFeatureSettings="onum, smcp"
+                    android:textAppearance="@style/TextAppearance.NotifyMoe.Headline5"
+                    app:layout_constraintBaseline_toBaselineOf="@+id/nickNameTextView"
+                    app:layout_constraintStart_toEndOf="@+id/nickNameTextView"
+                    tools:text="23" />
 
-            <TextView
-                android:id="@+id/sexTextView"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="16dp"
-                android:layout_marginTop="8dp"
-                android:textAppearance="@style/TextAppearance.NotifyMoe.Subtitle2"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/nickNameTextView"
-                tools:text="Homme" />
+                <TextView
+                    android:id="@+id/descriptionTextView"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginTop="16dp"
+                    android:layout_marginEnd="16dp"
+                    android:layout_marginBottom="8dp"
+                    android:textAppearance="@style/TextAppearance.NotifyMoe.Body1"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintHorizontal_bias="0.5"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/sexTextView"
+                    app:layout_constraintVertical_bias="0.0"
+                    tools:text="@tools:sample/lorem/random" />
 
-        </android.support.constraint.ConstraintLayout>
+                <TextView
+                    android:id="@+id/sexTextView"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginTop="8dp"
+                    android:textAppearance="@style/TextAppearance.NotifyMoe.Subtitle2"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/nickNameTextView"
+                    tools:text="Homme" />
 
-    </android.support.v4.widget.NestedScrollView>
+            </android.support.constraint.ConstraintLayout>
+
+        </android.support.v4.widget.NestedScrollView>
+    </app.soulcramer.soone.ui.common.statefulview.StatefulView>
 
 
     <android.support.design.widget.FloatingActionButton

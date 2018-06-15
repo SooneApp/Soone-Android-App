@@ -2,7 +2,9 @@ package app.soulcramer.soone.api
 
 import android.arch.lifecycle.LiveData
 import app.soulcramer.soone.vo.user.User
+import com.google.gson.annotations.SerializedName
 import kotlinx.coroutines.experimental.Deferred
+import retrofit2.Call
 import retrofit2.http.*
 
 /**
@@ -49,4 +51,18 @@ interface SooneService {
      */
     @GET("api/disconnect/{userId}")
     fun disconnect(@Path("userId") userId: String): LiveData<ApiResponse<User>>
+
+    /**
+     * @param searchBody
+     */
+    @POST("api/instantSearch")
+    fun instantSearch(@Body searchBody: SearchBody): Call<String>
+
+
+    data class SearchBody(
+        @SerializedName("id")
+        val userId: String = "",
+        val ageRange: List<Int> = listOf(),
+        val city: String = "Montpelier"
+    )
 }

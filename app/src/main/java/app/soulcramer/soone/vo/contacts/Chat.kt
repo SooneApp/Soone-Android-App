@@ -1,5 +1,6 @@
 package app.soulcramer.soone.vo.contacts
 
+import io.realm.RealmList
 import io.realm.RealmObject
 import io.realm.annotations.Index
 import io.realm.annotations.PrimaryKey
@@ -13,10 +14,13 @@ open class Chat(
     var id: String = "",
     @field:Required
     @field:Index
-    var idUser1: String = "",
+    var user1: String = "",
     @field:Required
     @field:Index
-    var idUser2: String = "",
+    var user2: String = "",
+    var startDate: String = "",
+    var endDate: String = "",
+    var messages: RealmList<Message>? = null,
     var createdAt: String = "",
     var updatedAt: String = "",
     var deletedAt: String? = null

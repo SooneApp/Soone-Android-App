@@ -1,5 +1,6 @@
 package app.soulcramer.soone.vo.user
 
+import com.google.gson.annotations.Expose
 import com.google.gson.annotations.SerializedName
 import io.realm.RealmObject
 import io.realm.annotations.Index
@@ -16,13 +17,16 @@ open class User(
     @field:Index
     var nickName: String = "",
     var birthDate: String = "",
+    var phoneNumber: String = "",
     var sex: Int = 0,
     //var sexInterests: SexInterest? = null,
     var description: String = "",
     var lastSeen: String = "",
     var createdAt: String = "",
     var updatedAt: String = "",
-    var deletedAt: String? = null
+    var deletedAt: String? = null,
+    @Expose(serialize = false, deserialize = false)
+    var activeChatId: String = ""
 ) : RealmObject() {
 
     fun getSexEnum(): Sex = Sex.fromInt(sex)

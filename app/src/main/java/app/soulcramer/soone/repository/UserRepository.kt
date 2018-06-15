@@ -44,6 +44,12 @@ class UserRepository @Inject constructor(
         }
     }
 
+    fun connectUser(phoneNumber: String): Deferred<User> {
+        return async(dispatchers.network) {
+            service.connect(phoneNumber, FirebaseInstanceId.getInstance().token).await()
+        }
+    }
+
     fun updateUser(user: User): Deferred<Resource<User>> {
         return async(dispatchers.network) {
             try {

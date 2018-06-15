@@ -11,9 +11,16 @@ import android.view.ViewGroup
 import androidx.navigation.findNavController
 import app.soulcramer.soone.common.observeK
 import app.soulcramer.soone.di.Injectable
+import app.soulcramer.soone.ui.common.statefulview.Data
+import app.soulcramer.soone.vo.Error
+import app.soulcramer.soone.vo.Loading
+import app.soulcramer.soone.vo.Success
 import app.soulcramer.soone.vo.user.Sex
+import app.soulcramer.soone.vo.user.User
 import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.fragment_user.*
+import kotlinx.coroutines.experimental.android.UI
+import kotlinx.coroutines.experimental.launch
 import org.threeten.bp.LocalDate
 import org.threeten.bp.Period
 import org.threeten.bp.ZoneId
@@ -39,39 +46,59 @@ class UserFragment : Fragment(), Injectable {
         userViewModel = ViewModelProviders.of(requireActivity(), viewModelFactory)
             .get(UserViewModel::class.java)
 
+        statefulView.isSwipeRefreshEnable = true
+        statefulView.swipeRefreshLayout.setOnRefreshListener {
+            userViewModel.retry()
+        }
+
         userViewModel.user.observeK(this) { userResource ->
-            userResource.data?.run {
-                nickNameTextView.text = nickName.capitalize()
-
-                if (description.isEmpty()) {
-                    descriptionTextView.text = getString(R.string.user_description_empty)
-                    descriptionTextView.setTextAppearance(R.style.TextAppearance_NotifyMoe_Caption)
-                } else {
-                    descriptionTextView.text = description
-                    descriptionTextView.setTextAppearance(R.style.TextAppearance_NotifyMoe_Body1)
-                }
-
-                sexTextView.text = getString(Sex.fromInt(sex).stringRes())
-
-                if (birthDate.isNotEmpty()) {
-                    val date = LocalDate.parse(birthDate, DateTimeFormatter.ISO_OFFSET_DATE_TIME)
-                    val birthday = date.atStartOfDay(ZoneId.systemDefault()).toLocalDate()
-                    val now = LocalDate.now()
-                    ageTextView.text = Period.between(birthday, now).years.toString()
-                }
-                Picasso.get()
-                    .load("https://media.notify.moe/images/covers/large/$id.jpg")
-                    .error(R.drawable.ic_image_off_black_24dp)
-                    .into(coverImageView)
-
-                saveEditUserFab.show()
-                saveEditUserFab.setOnClickListener {
-                    val action = UserFragmentDirections.actionEditUser(id)
-                    action.setUserId(id)
-                    it.findNavController().navigate(action)
+            when (userResource.status) {
+                is Loading -> statefulView.state = statefulView.loadingState
+                is Error -> statefulView.state = statefulView.errorState
+                is Success -> {
+                    userResource.data?.run {
+                        handleData()
+                    }
                 }
             }
         }
-//        userViewModel.retry()
+    }
+
+    private fun User.handleData() {
+        statefulView.state = Data()
+        nickNameTextView.text = nickName.capitalize()
+
+        if (description.isEmpty()) {
+            descriptionTextView.text = getString(R.string.user_description_empty)
+            descriptionTextView.setTextAppearance(R.style.TextAppearance_NotifyMoe_Caption)
+        } else {
+            descriptionTextView.text = description
+            descriptionTextView.setTextAppearance(R.style.TextAppearance_NotifyMoe_Body1)
+        }
+
+        sexTextView.text = getString(Sex.fromInt(sex).stringRes())
+
+        if (birthDate.isNotEmpty()) {
+            launch {
+                val date = LocalDate.parse(birthDate, DateTimeFormatter.ISO_OFFSET_DATE_TIME)
+                val birthday = date.atStartOfDay(ZoneId.systemDefault()).toLocalDate()
+                val now = LocalDate.now()
+                launch(UI) {
+                    ageTextView.text = Period.between(birthday, now).years.toString()
+                }
+            }
+
+        }
+        Picasso.get()
+            .load("https://media.notify.moe/images/covers/large/$id.jpg")
+            .error(R.drawable.ic_image_off_black_24dp)
+            .into(coverImageView)
+
+        saveEditUserFab.show()
+        saveEditUserFab.setOnClickListener {
+            val action = UserFragmentDirections.actionEditUser(id)
+            action.setUserId(id)
+            it.findNavController().navigate(action)
+        }
     }
 }

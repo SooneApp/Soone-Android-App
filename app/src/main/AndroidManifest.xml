@@ -30,7 +30,7 @@
             android:name="com.google.firebase.messaging.default_notification_channel_id"
             android:value="1" />
 
-        <service android:name="app.soulcramer.soone.fcm.MyFirebaseMessagingService">
+        <service android:name="app.soulcramer.soone.fcm.SooneMessagingService">
             <intent-filter>
                 <action android:name="com.google.firebase.MESSAGING_EVENT" />
             </intent-filter>

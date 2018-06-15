@@ -68,7 +68,7 @@ class ChatFragment : Fragment(), Injectable {
         itemAdapter.add()
 
 
-        userViewModel.setId("1")
+        //userViewModel.setId("1")
         userViewModel.user.observeK(this) { userResource ->
             userResource.data?.run {
 

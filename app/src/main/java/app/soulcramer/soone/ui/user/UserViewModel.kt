@@ -67,4 +67,11 @@ class UserViewModel @Inject constructor(var userRepository: UserRepository) : Vi
             setId(user.id)
         }
     }
+
+    fun connectUser(phoneNumber: String = user.value?.data?.phoneNumber ?: "") {
+        launch(UI) {
+            val user = userRepository.connectUser(phoneNumber).await()
+            setId(user.id)
+        }
+    }
 }

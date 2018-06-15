@@ -32,7 +32,9 @@ class HomeActivity : AppCompatActivity(), Injectable, HasSupportFragmentInjector
         userViewModel = ViewModelProviders.of(this, viewModelFactory)
             .get(UserViewModel::class.java)
 
-        userViewModel.setId("d344d15f-0721-48cc-a113-a7243307e84")
+        userViewModel.setId("d344d15f-0721-48cc-a113-a7243307e80")
+        userViewModel.connectUser("0603030303")
+
 
         bottomNavigationView.setupWithNavController(navController)
     }
