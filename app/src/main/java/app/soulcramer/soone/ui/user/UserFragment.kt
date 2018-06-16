@@ -53,7 +53,7 @@ class UserFragment : Fragment(), Injectable {
 
         userViewModel.user.observeK(this) { userResource ->
             when (userResource.status) {
-                is Loading -> statefulView.state = statefulView.loadingState
+                is Loading -> if (userResource.data == null) statefulView.state = statefulView.loadingState
                 is Error -> statefulView.state = statefulView.errorState
                 is Success -> {
                     userResource.data?.run {

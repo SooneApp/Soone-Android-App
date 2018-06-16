@@ -63,7 +63,7 @@ class ContactFragment : Fragment(), Injectable {
             })
         }
 
-        contactsRecyclerView.adapter = fastAdapter
+        chatRecyclerView.adapter = fastAdapter
 
         userViewModel.user.observeK(this) { userResource ->
             userResource.data?.run {

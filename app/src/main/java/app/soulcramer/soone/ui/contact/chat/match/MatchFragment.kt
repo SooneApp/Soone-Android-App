@@ -64,7 +64,7 @@ class MatchFragment : Fragment(), Injectable {
             })
         }
 
-        contactsRecyclerView.adapter = fastAdapter
+        chatRecyclerView.adapter = fastAdapter
 
         itemAdapter.add()
 

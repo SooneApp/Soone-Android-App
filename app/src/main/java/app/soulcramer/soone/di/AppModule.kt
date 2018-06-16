@@ -1,8 +1,7 @@
 package app.soulcramer.soone.di
 
 import app.soulcramer.soone.api.SooneService
-import app.soulcramer.soone.db.UserDao
-import app.soulcramer.soone.db.userDao
+import app.soulcramer.soone.db.*
 import app.soulcramer.soone.util.LiveDataCallAdapterFactory
 import com.jakewharton.retrofit2.adapter.kotlin.coroutines.experimental.CoroutineCallAdapterFactory
 import com.zhuinden.monarchy.Monarchy
@@ -43,6 +42,14 @@ class AppModule {
     @Singleton
     @Provides
     fun provideUserDao(monarchy: Monarchy): UserDao = monarchy.userDao()
+
+    @Singleton
+    @Provides
+    fun provideChatDao(monarchy: Monarchy): ChatDao = monarchy.chatDao()
+
+    @Singleton
+    @Provides
+    fun provideMessageDao(monarchy: Monarchy): MessageDao = monarchy.messageDao()
 
     @Provides
     @Singleton

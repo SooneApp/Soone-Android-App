@@ -10,6 +10,7 @@ import android.media.RingtoneManager
 import android.os.Build
 import android.support.v4.app.NotificationCompat
 import android.util.Log
+import androidx.core.content.edit
 import app.soulcramer.soone.db.UserDao
 import app.soulcramer.soone.db.userDao
 import app.soulcramer.soone.ui.HomeActivity
@@ -82,10 +83,10 @@ class SooneMessagingService : FirebaseMessagingService() {
         val gson = GsonBuilder().create()
         val user1: User = gson.fromJson(data["user1"], User::class.java)
         val user2: User = gson.fromJson(data["user2"], User::class.java)
-        val chatId: String = data["chatId"] ?: ""
 
-        user1.activeChatId = chatId
-        user2.activeChatId = chatId
+        getSharedPreferences("sooneSharedPref", Context.MODE_PRIVATE).edit {
+            putString("activeChatId", data["chatId"])
+        }
         userDao.insert(user1)
         userDao.insert(user2)
     }

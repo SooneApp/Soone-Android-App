@@ -70,6 +70,9 @@
         <action
             android:id="@+id/action_chatFragment_to_profile"
             app:destination="@id/profile" />
+        <argument
+            android:name="activeChatId"
+            app:type="string" />
     </fragment>
     <fragment
         android:id="@+id/matchFragment"

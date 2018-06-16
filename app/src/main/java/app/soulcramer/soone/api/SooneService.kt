@@ -1,6 +1,7 @@
 package app.soulcramer.soone.api
 
 import android.arch.lifecycle.LiveData
+import app.soulcramer.soone.vo.contacts.Chat
 import app.soulcramer.soone.vo.user.User
 import com.google.gson.annotations.SerializedName
 import kotlinx.coroutines.experimental.Deferred
@@ -58,11 +59,33 @@ interface SooneService {
     @POST("api/instantSearch")
     fun instantSearch(@Body searchBody: SearchBody): Call<String>
 
+    /**
+     * @param chatId
+     */
+    @GET("api/chat")
+    fun getChatById(@Query("id") chatId: String): LiveData<ApiResponse<Chat>>
+
+    /**
+     * @param chatId
+     */
+    @POST("api/message")
+    fun sendMessage(
+        @Query("chatId") chatId: String,
+        @Query("senderId") userId: String,
+        @Query("content") content: String
+    ): Call<Chat>
+
 
     data class SearchBody(
         @SerializedName("id")
         val userId: String = "",
         val ageRange: List<Int> = listOf(),
         val city: String = "Montpelier"
+    )
+
+    data class MessageBody(
+        val chatId: String = "",
+        val userId: String = "",
+        val content: String = ""
     )
 }

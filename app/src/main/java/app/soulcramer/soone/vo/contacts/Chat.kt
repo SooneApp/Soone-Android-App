@@ -20,7 +20,7 @@ open class Chat(
     var user2: String = "",
     var startDate: String = "",
     var endDate: String = "",
-    var messages: RealmList<Message>? = null,
+    var messages: RealmList<Message> = RealmList(),
     var createdAt: String = "",
     var updatedAt: String = "",
     var deletedAt: String? = null

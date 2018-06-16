@@ -29,7 +29,7 @@ class UserRepository @Inject constructor(
                 userDao.insert(item)
             }
 
-            override fun shouldFetch(data: User?) = data == null
+            override fun shouldFetch(data: User?) = true
 
             override fun loadFromDb() = userDao.findByIdAsync(id)
 

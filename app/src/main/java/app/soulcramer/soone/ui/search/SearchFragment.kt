@@ -3,6 +3,8 @@ package app.soulcramer.soone.ui.search
 import `fun`.soone.R
 import android.arch.lifecycle.ViewModelProvider
 import android.arch.lifecycle.ViewModelProviders
+import android.content.Context
+import android.content.SharedPreferences
 import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.view.LayoutInflater
@@ -20,7 +22,8 @@ import retrofit2.Callback
 import retrofit2.Response
 import javax.inject.Inject
 
-class SearchFragment : Fragment(), Injectable {
+class SearchFragment : Fragment(), Injectable, SharedPreferences.OnSharedPreferenceChangeListener {
+
     @Inject
     lateinit var viewModelFactory: ViewModelProvider.Factory
 
@@ -38,6 +41,10 @@ class SearchFragment : Fragment(), Injectable {
         savedInstanceState: Bundle?
     ): View? = inflater.inflate(R.layout.fragment_search, container, false)
 
+    private val sharedPreferences: SharedPreferences by lazy {
+        requireActivity().getSharedPreferences("sooneSharedPref", Context.MODE_PRIVATE)
+    }
+
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
         searchViewModel = ViewModelProviders.of(this, viewModelFactory)
@@ -45,14 +52,12 @@ class SearchFragment : Fragment(), Injectable {
         userViewModel = ViewModelProviders.of(requireActivity(), viewModelFactory)
             .get(UserViewModel::class.java)
 
+        sharedPreferences.registerOnSharedPreferenceChangeListener(this)
+        launchActiveChat(sharedPreferences)
 
         userViewModel.user.observeK(this) {
             it.data?.run {
                 searchParam = SooneService.SearchBody(id ?: "", listOf(18, 25))
-                if (activeChatId.isNotEmpty()) {
-                    val action = SearchFragmentDirections.actionSearchMatch()
-                    findNavController().navigate(action)
-                }
             }
 
         }
@@ -67,6 +72,27 @@ class SearchFragment : Fragment(), Injectable {
                     }
                 })
             }
+        }
+    }
+
+
+    override fun onDestroyView() {
+        sharedPreferences.unregisterOnSharedPreferenceChangeListener(this)
+        super.onDestroyView()
+    }
+
+    override fun onSharedPreferenceChanged(sharedPreference: SharedPreferences, key: String) {
+        if (key == "activeChatId") {
+            launchActiveChat(sharedPreference)
+        }
+    }
+
+    private fun launchActiveChat(sharedPreferences: SharedPreferences) {
+        val activeChatId = sharedPreferences.getString("activeChatId", "")
+        if (activeChatId.isNotEmpty()) {
+            val action = SearchFragmentDirections.actionSearchMatch(activeChatId)
+            action.setActiveChatId(activeChatId)
+            findNavController().navigate(action)
         }
     }
 }
