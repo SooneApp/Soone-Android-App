@@ -86,7 +86,7 @@ dependencies {
     implementation "com.android.support:support-annotations:28.0.0-alpha3"
     implementation "com.android.support:design:28.0.0-alpha3"
     implementation "com.android.support:customtabs:28.0.0-alpha3"
-    implementation "com.android.support.constraint:constraint-layout:1.1.1"
+    implementation "com.android.support.constraint:constraint-layout:1.1.2"
     implementation "androidx.core:core-ktx:0.3"
 
 

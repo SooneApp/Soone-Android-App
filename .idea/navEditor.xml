@@ -19,12 +19,7 @@
                         </option>
                         <option name="myPositions">
                           <map>
-                            <entry key="actionChatMatch">
-                              <value>
-                                <LayoutPositions />
-                              </value>
-                            </entry>
-                            <entry key="actionChatProfile">
+                            <entry key="action_chat_to_match2">
                               <value>
                                 <LayoutPositions />
                               </value>
@@ -46,11 +41,6 @@
                         <option name="myPositions">
                           <map>
                             <entry key="actionContactChat">
-                              <value>
-                                <LayoutPositions />
-                              </value>
-                            </entry>
-                            <entry key="actionContactProfile">
                               <value>
                                 <LayoutPositions />
                               </value>
@@ -86,21 +76,30 @@
                       <LayoutPositions>
                         <option name="myPosition">
                           <Point>
-                            <option name="x" value="-107" />
-                            <option name="y" value="28" />
+                            <option name="x" value="-11" />
+                            <option name="y" value="12" />
                           </Point>
                         </option>
                       </LayoutPositions>
                     </value>
                   </entry>
-                  <entry key="matchFragment">
+                  <entry key="match">
                     <value>
                       <LayoutPositions>
                         <option name="myPosition">
                           <Point>
-                            <option name="x" value="928" />
-                            <option name="y" value="-363" />
+                            <option name="x" value="1055" />
+                            <option name="y" value="-19" />
                           </Point>
+                        </option>
+                        <option name="myPositions">
+                          <map>
+                            <entry key="action_match_to_search">
+                              <value>
+                                <LayoutPositions />
+                              </value>
+                            </entry>
+                          </map>
                         </option>
                       </LayoutPositions>
                     </value>
@@ -131,18 +130,18 @@
                       <LayoutPositions>
                         <option name="myPosition">
                           <Point>
-                            <option name="x" value="303" />
-                            <option name="y" value="-24" />
+                            <option name="x" value="306" />
+                            <option name="y" value="-75" />
                           </Point>
                         </option>
                         <option name="myPositions">
                           <map>
-                            <entry key="actionSearchChat">
+                            <entry key="action_search_to_chat2">
                               <value>
                                 <LayoutPositions />
                               </value>
                             </entry>
-                            <entry key="actionSearchMatch">
+                            <entry key="action_search_to_match2">
                               <value>
                                 <LayoutPositions />
                               </value>

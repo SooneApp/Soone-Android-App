@@ -82,7 +82,25 @@ interface SooneService {
     @GET("api/messages")
     fun getMessages(
         @Query("chatId") chatId: String,
-        @Query("senderId") userId: String
+        @Query("userId") userId: String
+    ): LiveData<ApiResponse<List<Message>>>
+
+    /**
+     * @param chatId
+     */
+    @GET("api/matchDecision")
+    fun getMatchDecision(
+        @Query("chatId") chatId: String,
+        @Query("userId") userId: String
+    ): LiveData<ApiResponse<List<Message>>>
+
+    /**
+     * @param chatId
+     */
+    @PUT("api/matchDecision")
+    fun updateMatchDecision(
+        @Query("chatId") chatId: String,
+        @Query("userId") userId: String
     ): LiveData<ApiResponse<List<Message>>>
 
 

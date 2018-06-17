@@ -21,9 +21,9 @@ class MessageDao @Inject constructor(private val monarchy: Monarchy) {
         monarchy.runTransactionSync { it.copyToRealmOrUpdate(message) }
     }
 
-    fun findByChatIdAsync(id: String): LiveData<List<Message>> {
+    fun findByChatIdAsync(userId: String, id: String): LiveData<List<Message>> {
         return monarchy.findAllCopiedWithChanges { realm ->
-            realm.where<Message>().equalTo(MessageFields.CHAT_ID, id)
+            realm.where<Message>().equalTo(MessageFields.CHAT_ID, id).and().equalTo(MessageFields.SENDER_ID, userId)
         }
     }
 

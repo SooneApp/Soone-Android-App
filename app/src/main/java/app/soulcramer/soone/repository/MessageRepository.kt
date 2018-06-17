@@ -34,9 +34,9 @@ class MessageRepository @Inject constructor(
 
             override fun shouldFetch(data: List<Message>?) = true
 
-            override fun loadFromDb() = messageDao.findByChatIdAsync(chatID)
+            override fun loadFromDb() = messageDao.findByChatIdAsync(userId, chatID)
 
-            override fun createCall() = service.getMessages(userId, chatID)
+            override fun createCall() = service.getMessages(chatID, userId)
         }.asLiveData()
     }
 

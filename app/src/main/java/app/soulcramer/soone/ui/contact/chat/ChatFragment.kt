@@ -9,19 +9,23 @@ import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.support.v7.app.ActionBar
 import android.support.v7.app.AppCompatActivity
+import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.content.edit
-import androidx.navigation.fragment.findNavController
+import androidx.navigation.fragment.NavHostFragment
 import app.soulcramer.soone.common.observeK
 import app.soulcramer.soone.di.Injectable
+import app.soulcramer.soone.ui.common.EqualSpacingItemDecoration
+import app.soulcramer.soone.ui.common.dpToPx
 import app.soulcramer.soone.ui.common.statefulview.Data
 import app.soulcramer.soone.ui.user.UserViewModel
 import app.soulcramer.soone.vo.Error
 import app.soulcramer.soone.vo.Loading
 import app.soulcramer.soone.vo.Success
+import app.soulcramer.soone.vo.contacts.Chat
 import com.mikepenz.fastadapter.FastAdapter
 import com.mikepenz.fastadapter.adapters.ItemAdapter
 import com.mikepenz.fastadapter.listeners.ClickEventHook
@@ -56,7 +60,7 @@ class ChatFragment : Fragment(), Injectable {
         return inflater.inflate(R.layout.fragment_chat, container, false)
     }
 
-    private lateinit var itemAdapter: ItemAdapter<UserMessageItem>
+    private val itemAdapter = ItemAdapter<UserMessageItem>()
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
@@ -69,7 +73,13 @@ class ChatFragment : Fragment(), Injectable {
 
         val chatId = ChatFragmentArgs.fromBundle(arguments).activeChatId
 
-        val itemAdapter = ItemAdapter<UserMessageItem>()
+        chatRecyclerView.apply {
+            layoutManager = LinearLayoutManager(context)
+            val itemsPadding = 16f.dpToPx(resources.displayMetrics)
+            addItemDecoration(EqualSpacingItemDecoration(itemsPadding,
+                EqualSpacingItemDecoration.VERTICAL))
+        }
+
         val fastAdapter = FastAdapter.with<UserMessageItem, ItemAdapter<UserMessageItem>>(itemAdapter).apply {
             withSelectable(true)
             withOnClickListener { v, adapter, item, position ->
@@ -96,18 +106,16 @@ class ChatFragment : Fragment(), Injectable {
 
         chatViewModel.chat.observeK(this) { chatRessource ->
             when (chatRessource.status) {
-                is Loading -> if (chatRessource.data == null) statefulView.state = statefulView.loadingState
+                is Loading -> if (itemAdapter.itemList.isEmpty) statefulView.state = statefulView.loadingState
                 is Error -> statefulView.state = statefulView.errorState
                 is Success -> {
                     chatRessource.data?.run {
+                        chatViewModel.startTimer(endDateTime)
                         if (endDateTime.isBefore(ChronoZonedDateTime.from(ZonedDateTime.now()))) {
-                            sharedPreferences.edit {
-                                "activeDecision" to true
-                            }
-                            val action = ChatFragmentDirections.actionChatMatch(id, sharedPreferences.getString("activeDecision", ""))
-                            action.setChatId(id)
-                            findNavController().navigate(action)
+                            chatExpired(this)
                         }
+                        chatViewModel.setUser1Id(user1)
+                        chatViewModel.setUser1Id(user2)
                     }
                 }
             }
@@ -117,17 +125,25 @@ class ChatFragment : Fragment(), Injectable {
                 ZonedDateTime.parse(it.date, DateTimeFormatter.ISO_OFFSET_DATE_TIME)
             }.map {
                 UserMessageItem().apply {
-                    contact
+                    message = it.content
                 }
-            }.reversed()
+            }
 
             if (items.isEmpty()) {
                 statefulView.state = statefulView.emptyState
             } else {
                 statefulView.state = Data()
-                itemAdapter.add(items)
+                itemAdapter.setNewList(items)
             }
         }
+
+        chatViewModel.remainingTime.observeK(this) {
+            if (it <= 0) {
+                chatExpired(chatViewModel.chat.value?.data!!)
+            }
+            remainingTextView.text = "${it / 60} minutes et ${it % 60} secondes restantes"
+        }
+
         chatViewModel.setId(chatId)
 
 
@@ -139,5 +155,16 @@ class ChatFragment : Fragment(), Injectable {
                 )
             }
         }
+    }
+
+    private fun chatExpired(chat: Chat) {
+        sharedPreferences.edit {
+            putBoolean("activeDecision", true)
+        }
+        val activeDecisionId = sharedPreferences.getString("activeDecisionId", "")
+        val action = ChatFragmentDirections.Action_chat_to_match2(chat.id, activeDecisionId)
+        action.setChatId(chat.id)
+        action.setDecisionId(activeDecisionId)
+        NavHostFragment.findNavController(this).navigate(action)
     }
 }

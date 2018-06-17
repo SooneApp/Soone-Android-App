@@ -13,6 +13,7 @@ import android.view.ViewGroup
 import androidx.core.text.bold
 import androidx.core.text.buildSpannedString
 import androidx.core.text.color
+import androidx.navigation.findNavController
 import app.soulcramer.soone.common.observeK
 import app.soulcramer.soone.db.UserDao
 import app.soulcramer.soone.di.Injectable
@@ -70,10 +71,10 @@ class MatchFragment : Fragment(), Injectable {
                     bold {
                         color(R.color.primaryVariant) {
                             if (user1 == userViewModel.id.value) {
-                                userDao.findById(user2).nickName
+                                userDao.findById(user2)?.nickName
 
                             } else {
-                                userDao.findById(user1).nickName
+                                userDao.findById(user1)?.nickName
                             }
                         }
                     }
@@ -82,5 +83,15 @@ class MatchFragment : Fragment(), Injectable {
             }
         }
         chatViewModel.setId(chatId)
+
+        continueButton.setOnClickListener {
+            val action = MatchFragmentDirections.action_match_to_search()
+            it.findNavController().navigate(action)
+        }
+
+        newSearchButton.setOnClickListener {
+            val action = MatchFragmentDirections.action_match_to_search()
+            it.findNavController().navigate(action)
+        }
     }
 }

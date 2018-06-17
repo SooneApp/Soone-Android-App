@@ -100,15 +100,17 @@ class SearchFragment : Fragment(), Injectable, SharedPreferences.OnSharedPrefere
         val activeDecision = sharedPreferences.getBoolean("activeDecision", false)
         val activeDecisionId = sharedPreferences.getString("activeDecisionId", "")
         if (activeDecision) {
-            val action = SearchFragmentDirections.actionSearchMatch(activeChatId, activeDecisionId)
+            val action = SearchFragmentDirections.action_search_to_match2(activeChatId, activeDecisionId)
             action.setChatId(activeChatId)
             action.setDecisionId(activeDecisionId)
             findNavController().navigate(action)
         }
         if (activeChatId.isNotEmpty()) {
-            val action = SearchFragmentDirections.actionSearchChat(activeChatId)
+            val action = SearchFragmentDirections.action_search_to_chat2(activeChatId)
             action.setActiveChatId(activeChatId)
             findNavController().navigate(action)
         }
     }
+
+
 }
