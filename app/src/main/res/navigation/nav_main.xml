@@ -34,6 +34,9 @@
         <action
             android:id="@+id/action_search_to_chat2"
             app:destination="@id/chat" />
+        <action
+            android:id="@+id/action_search_to_signupFragment"
+            app:destination="@id/signupFragment" />
     </fragment>
     <fragment
         android:id="@+id/editUserFragment"
@@ -88,5 +91,24 @@
         <action
             android:id="@+id/action_match_to_search"
             app:destination="@id/search" />
+    </fragment>
+    <fragment
+        android:id="@+id/signupFragment"
+        android:name="app.soulcramer.soone.ui.signup.SignupFragment"
+        android:label="SignupFragment">
+        <action
+            android:id="@+id/action_signupFragment_to_signupMoreFragment"
+            app:destination="@id/signupMoreFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/signupMoreFragment"
+        android:name="app.soulcramer.soone.ui.signup.SignupMoreFragment"
+        android:label="SignupMoreFragment">
+        <action
+            android:id="@+id/action_signupMoreFragment_to_search"
+            app:destination="@id/search" />
+        <argument
+            android:name="userId"
+            app:type="string" />
     </fragment>
 </navigation>

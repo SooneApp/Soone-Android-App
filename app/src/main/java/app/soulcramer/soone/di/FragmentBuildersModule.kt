@@ -5,6 +5,8 @@ import app.soulcramer.soone.ui.contact.chat.ChatFragment
 import app.soulcramer.soone.ui.contact.chat.match.MatchFragment
 import app.soulcramer.soone.ui.search.SearchFragment
 import app.soulcramer.soone.ui.settings.SettingsFragment
+import app.soulcramer.soone.ui.signup.SignupFragment
+import app.soulcramer.soone.ui.signup.SignupMoreFragment
 import app.soulcramer.soone.ui.user.UserFragment
 import app.soulcramer.soone.ui.user.edit.EditUserFragment
 import dagger.Module
@@ -33,4 +35,10 @@ abstract class FragmentBuildersModule {
 
     @ContributesAndroidInjector
     abstract fun contributeMatchFragment(): MatchFragment
+
+    @ContributesAndroidInjector
+    abstract fun contributeSignupFragment(): SignupFragment
+
+    @ContributesAndroidInjector
+    abstract fun contributeSignupMoreFragment(): SignupMoreFragment
 }

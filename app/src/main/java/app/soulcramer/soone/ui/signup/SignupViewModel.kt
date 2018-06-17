@@ -1,37 +1,18 @@
 package app.soulcramer.soone.ui.signup
 
-import android.arch.lifecycle.LiveData
 import android.arch.lifecycle.MutableLiveData
-import android.arch.lifecycle.Transformations
 import android.arch.lifecycle.ViewModel
 import app.soulcramer.soone.repository.UserRepository
-import app.soulcramer.soone.util.AbsentLiveData
-import app.soulcramer.soone.vo.Resource
 import app.soulcramer.soone.vo.user.User
 import javax.inject.Inject
 
-class SignupViewModel @Inject constructor(userRepository: UserRepository) : ViewModel() {
-    private val _nick = MutableLiveData<String>()
-    val nick: LiveData<String>
-        get() = _nick
-    val user: LiveData<Resource<User>> = Transformations
-        .switchMap(_nick) { id ->
-            if (id == null) {
-                AbsentLiveData.create()
-            } else {
-                userRepository.loadUserById(id)
-            }
-        }
+class SignupViewModel @Inject constructor(var userRepository: UserRepository) : ViewModel() {
 
-    fun setNickname(nick: String?) {
-        if (_nick.value != nick) {
-            _nick.value = nick
-        }
-    }
 
-    fun retry() {
-        _nick.value?.let {
-            _nick.value = it
-        }
+    var user = MutableLiveData<User>()
+
+    suspend fun createUser(phoneNumber: String): User {
+        val newUser = userRepository.createUser(phoneNumber).await()!!
+        return userRepository.connectUser(newUser.phoneNumber).await()
     }
 }

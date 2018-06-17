@@ -4,7 +4,9 @@ import android.arch.lifecycle.ViewModel
 import android.arch.lifecycle.ViewModelProvider
 import app.soulcramer.soone.ui.contact.ContactsViewModel
 import app.soulcramer.soone.ui.contact.chat.ChatViewModel
+import app.soulcramer.soone.ui.contact.chat.match.MatchViewModel
 import app.soulcramer.soone.ui.search.SearchViewModel
+import app.soulcramer.soone.ui.signup.SignupViewModel
 import app.soulcramer.soone.ui.user.UserViewModel
 import app.soulcramer.soone.viewmodel.SooneViewModelFactory
 import dagger.Binds
@@ -33,6 +35,17 @@ abstract class ViewModelModule {
     @IntoMap
     @ViewModelKey(ChatViewModel::class)
     abstract fun bindChatViewModel(chatViewModel: ChatViewModel): ViewModel
+
+
+    @Binds
+    @IntoMap
+    @ViewModelKey(MatchViewModel::class)
+    abstract fun bindMatchViewModel(matchViewModel: MatchViewModel): ViewModel
+
+    @Binds
+    @IntoMap
+    @ViewModelKey(SignupViewModel::class)
+    abstract fun bindSignupViewModel(signupViewModel: SignupViewModel): ViewModel
 
     @Binds
     abstract fun bindViewModelFactory(factory: SooneViewModelFactory): ViewModelProvider.Factory

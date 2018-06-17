@@ -14,20 +14,14 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.navigation.fragment.findNavController
 import app.soulcramer.soone.api.SooneService
-import app.soulcramer.soone.common.observeK
 import app.soulcramer.soone.di.Injectable
-import app.soulcramer.soone.ui.search.SearchFragmentDirections
-import app.soulcramer.soone.ui.search.SearchViewModel
-import app.soulcramer.soone.ui.user.UserViewModel
-import kotlinx.android.synthetic.main.fragment_search.*
+import kotlinx.android.synthetic.main.fragment_signup.*
+import kotlinx.coroutines.experimental.CommonPool
 import kotlinx.coroutines.experimental.launch
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
 import javax.inject.Inject
 
 
-class SignupFragment : Fragment(), Injectable, SharedPreferences.OnSharedPreferenceChangeListener {
+class SignupFragment : Fragment(), Injectable {
 
     @Inject
     lateinit var viewModelFactory: ViewModelProvider.Factory
@@ -35,10 +29,7 @@ class SignupFragment : Fragment(), Injectable, SharedPreferences.OnSharedPrefere
     @Inject
     lateinit var service: SooneService
 
-    private lateinit var searchViewModel: SearchViewModel
-    private lateinit var userViewModel: UserViewModel
-
-    private lateinit var searchParam: SooneService.SearchBody
+    private lateinit var signupViewModel: SignupViewModel
 
     private val toolbar: ActionBar by lazy {
         (activity as AppCompatActivity).supportActionBar!!
@@ -57,32 +48,16 @@ class SignupFragment : Fragment(), Injectable, SharedPreferences.OnSharedPrefere
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-        searchViewModel = ViewModelProviders.of(this, viewModelFactory)
-            .get(SearchViewModel::class.java)
-        userViewModel = ViewModelProviders.of(requireActivity(), viewModelFactory)
-            .get(UserViewModel::class.java)
-
-        sharedPreferences.registerOnSharedPreferenceChangeListener(this)
-        launchActiveChat(sharedPreferences)
+        signupViewModel = ViewModelProviders.of(this, viewModelFactory)
+            .get(SignupViewModel::class.java)
 
         toolbar.title = "Inscription"
 
-        userViewModel.user.observeK(this) {
-            it.data?.run {
-                searchParam = SooneService.SearchBody(id ?: "", listOf(18, 25))
-            }
-
-        }
-
-        button.setOnClickListener {
-            launch {
-                service.instantSearch(searchParam).enqueue(object : Callback<String?> {
-                    override fun onFailure(call: Call<String?>?, t: Throwable?) {
-                    }
-
-                    override fun onResponse(call: Call<String?>?, response: Response<String?>?) {
-                    }
-                })
+        startSingupButton.setOnClickListener {
+            launch(CommonPool) {
+                val user = signupViewModel.createUser(phoneTextInputEditText.text.toString())
+                val action = SignupFragmentDirections.action_signupFragment_to_signupMoreFragment(user.id)
+                findNavController().navigate(action)
             }
         }
     }
@@ -91,29 +66,4 @@ class SignupFragment : Fragment(), Injectable, SharedPreferences.OnSharedPrefere
         sharedPreferences.unregisterOnSharedPreferenceChangeListener(this)
         super.onDestroyView()
     }
-
-    override fun onSharedPreferenceChanged(sharedPreference: SharedPreferences, key: String) {
-        if (key == "activeChatId" || key == "activeDecision") {
-            launchActiveChat(sharedPreference)
-        }
-    }
-
-    private fun launchActiveChat(sharedPreferences: SharedPreferences) {
-        val activeChatId = sharedPreferences.getString("activeChatId", "")
-        val activeDecision = sharedPreferences.getBoolean("activeDecision", false)
-        val activeDecisionId = sharedPreferences.getString("activeDecisionId", "")
-        if (activeDecision) {
-            val action = SearchFragmentDirections.action_search_to_match2(activeChatId, activeDecisionId)
-            action.setChatId(activeChatId)
-            action.setDecisionId(activeDecisionId)
-            findNavController().navigate(action)
-        }
-        if (activeChatId.isNotEmpty()) {
-            val action = SearchFragmentDirections.action_search_to_chat2(activeChatId)
-            action.setActiveChatId(activeChatId)
-            findNavController().navigate(action)
-        }
-    }
-
-
 }

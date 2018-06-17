@@ -15,7 +15,7 @@
         android:text="Entrer votre numéro de téléphone afin de commencer l'inscription"
         android:textAlignment="center"
         android:textAppearance="@style/TextAppearance.NotifyMoe.Headline5"
-        app:layout_constraintBottom_toTopOf="@+id/textInputLayout"
+        app:layout_constraintBottom_toTopOf="@+id/phoneTextInputLayout"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
@@ -23,18 +23,19 @@
         app:layout_constraintVertical_chainStyle="packed" />
 
     <android.support.design.widget.TextInputLayout
-        android:id="@+id/textInputLayout"
+        android:id="@+id/phoneTextInputLayout"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="32dp"
         android:layout_marginEnd="32dp"
-        app:layout_constraintBottom_toTopOf="@+id/button2"
+        app:layout_constraintBottom_toTopOf="@+id/startSingupButton"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textView3">
 
         <android.support.design.widget.TextInputEditText
+            android:id="@+id/phoneTextInputEditText"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="hint"
@@ -43,7 +44,7 @@
     </android.support.design.widget.TextInputLayout>
 
     <Button
-        android:id="@+id/button2"
+        android:id="@+id/startSingupButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="32dp"
@@ -52,5 +53,5 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textInputLayout" />
+        app:layout_constraintTop_toBottomOf="@+id/phoneTextInputLayout" />
 </android.support.constraint.ConstraintLayout>
