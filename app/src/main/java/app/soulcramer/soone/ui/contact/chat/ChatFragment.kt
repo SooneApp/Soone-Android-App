@@ -15,7 +15,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.content.edit
-import androidx.navigation.fragment.NavHostFragment
+import androidx.navigation.NavController
 import app.soulcramer.soone.common.observeK
 import app.soulcramer.soone.di.Injectable
 import app.soulcramer.soone.ui.common.EqualSpacingItemDecoration
@@ -165,6 +165,6 @@ class ChatFragment : Fragment(), Injectable {
         val action = ChatFragmentDirections.Action_chat_to_match2(chat.id, activeDecisionId)
         action.setChatId(chat.id)
         action.setDecisionId(activeDecisionId)
-        NavHostFragment.findNavController(this).navigate(action)
+        NavController(requireContext()).navigate(action)
     }
 }
