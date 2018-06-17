@@ -28,8 +28,11 @@
         android:label="DashboardFragment"
         tools:layout="@layout/fragment_dashboard">
         <action
-            android:id="@+id/actionSearchMatch"
+            android:id="@+id/actionSearchChat"
             app:destination="@id/chat" />
+        <action
+            android:id="@+id/actionSearchMatch"
+            app:destination="@id/matchFragment" />
     </fragment>
     <fragment
         android:id="@+id/editUserFragment"
@@ -65,10 +68,10 @@
         android:label="ChatFragment"
         tools:layout="@layout/fragment_chat">
         <action
-            android:id="@+id/action_chatFragment_to_matchFragment"
+            android:id="@+id/actionChatMatch"
             app:destination="@id/matchFragment" />
         <action
-            android:id="@+id/action_chatFragment_to_profile"
+            android:id="@+id/actionChatProfile"
             app:destination="@id/profile" />
         <argument
             android:name="activeChatId"
@@ -78,5 +81,12 @@
         android:id="@+id/matchFragment"
         android:name="app.soulcramer.soone.ui.contact.chat.match.MatchFragment"
         android:label="MatchFragment"
-        tools:layout="@layout/fragment_match" />
+        tools:layout="@layout/fragment_match">
+        <argument
+            android:name="chatId"
+            app:type="string" />
+        <argument
+            android:name="decisionId"
+            app:type="string" />
+    </fragment>
 </navigation>

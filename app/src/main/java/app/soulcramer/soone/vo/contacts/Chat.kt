@@ -1,11 +1,10 @@
 package app.soulcramer.soone.vo.contacts
 
-import io.realm.RealmList
+import com.google.gson.annotations.Expose
 import io.realm.RealmObject
-import io.realm.annotations.Index
-import io.realm.annotations.PrimaryKey
-import io.realm.annotations.RealmClass
-import io.realm.annotations.Required
+import io.realm.annotations.*
+import org.threeten.bp.ZonedDateTime
+import org.threeten.bp.format.DateTimeFormatter
 
 @RealmClass
 open class Chat(
@@ -20,8 +19,26 @@ open class Chat(
     var user2: String = "",
     var startDate: String = "",
     var endDate: String = "",
-    var messages: RealmList<Message> = RealmList(),
     var createdAt: String = "",
     var updatedAt: String = "",
     var deletedAt: String? = null
-) : RealmObject()
+) : RealmObject() {
+
+    @Ignore
+    @Expose(serialize = false, deserialize = false)
+    var endDateTime: ZonedDateTime = ZonedDateTime.now()
+        set(value) {
+            field = value
+            endDate = value.format(DateTimeFormatter.ISO_OFFSET_DATE_TIME)!!
+        }
+        get() = ZonedDateTime.parse(endDate, DateTimeFormatter.ISO_OFFSET_DATE_TIME)
+
+    @Ignore
+    @Expose(serialize = false, deserialize = false)
+    var startDateTime: ZonedDateTime = ZonedDateTime.now()
+        set(value) {
+            field = value
+            startDate = value.format(DateTimeFormatter.ISO_OFFSET_DATE_TIME)!!
+        }
+        get() = ZonedDateTime.parse(startDate, DateTimeFormatter.ISO_OFFSET_DATE_TIME)
+}

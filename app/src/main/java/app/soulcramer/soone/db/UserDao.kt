@@ -28,7 +28,7 @@ class UserDao @Inject constructor(private val monarchy: Monarchy) {
 
     fun findById(id: String): User {
         return monarchy.findAllSync(Realm.getInstance(monarchy.realmConfiguration)) {
-            it.where<User>().equalTo(UserFields.ID, id)
+            it.where<User>().equalTo("id", id)
         }.first()
     }
 }

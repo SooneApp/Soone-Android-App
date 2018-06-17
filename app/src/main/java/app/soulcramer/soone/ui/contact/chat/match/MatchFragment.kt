@@ -5,25 +5,33 @@ import android.arch.lifecycle.ViewModelProvider
 import android.arch.lifecycle.ViewModelProviders
 import android.os.Bundle
 import android.support.v4.app.Fragment
-import android.support.v7.widget.RecyclerView
+import android.support.v7.app.ActionBar
+import android.support.v7.app.AppCompatActivity
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.text.bold
+import androidx.core.text.buildSpannedString
+import androidx.core.text.color
 import app.soulcramer.soone.common.observeK
+import app.soulcramer.soone.db.UserDao
 import app.soulcramer.soone.di.Injectable
-import app.soulcramer.soone.ui.contact.ContactItem
+import app.soulcramer.soone.ui.common.statefulview.Data
 import app.soulcramer.soone.ui.contact.chat.ChatViewModel
 import app.soulcramer.soone.ui.user.UserViewModel
-import com.mikepenz.fastadapter.FastAdapter
-import com.mikepenz.fastadapter.adapters.ItemAdapter
-import com.mikepenz.fastadapter.listeners.ClickEventHook
-import kotlinx.android.synthetic.main.fragment_contacts.*
+import kotlinx.android.synthetic.main.fragment_match.*
 import javax.inject.Inject
 
 
 class MatchFragment : Fragment(), Injectable {
     @Inject
     lateinit var viewModelFactory: ViewModelProvider.Factory
+    @Inject
+    lateinit var userDao: UserDao
+
+    private val toolbar: ActionBar by lazy {
+        (activity as AppCompatActivity).supportActionBar!!
+    }
 
     private lateinit var userViewModel: UserViewModel
     private lateinit var chatViewModel: ChatViewModel
@@ -33,7 +41,7 @@ class MatchFragment : Fragment(), Injectable {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        return inflater.inflate(R.layout.fragment_chat, container, false)
+        return inflater.inflate(R.layout.fragment_match, container, false)
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
@@ -43,37 +51,36 @@ class MatchFragment : Fragment(), Injectable {
         chatViewModel = ViewModelProviders.of(this, viewModelFactory)
             .get(ChatViewModel::class.java)
 
-        val itemAdapter = ItemAdapter<ContactItem>()
-        val fastAdapter = FastAdapter.with<ContactItem, ItemAdapter<ContactItem>>(itemAdapter).apply {
-            withSelectable(true)
-            withOnClickListener { v, adapter, item, position ->
-                true
-            }
-            withEventHook(object : ClickEventHook<ContactItem>() {
+        toolbar.title = "Match"
 
-                override fun onBind(viewHolder: RecyclerView.ViewHolder): View? {
-                    //return the views on which you want to bind this event
-                    return if (viewHolder is ContactItem.ViewHolder) {
-                        (viewHolder as ContactItem.ViewHolder).itemView
-                    } else null
-                }
+        val args = MatchFragmentArgs.fromBundle(arguments)
+        val chatId = args.chatId
 
-                override fun onClick(v: View, position: Int, fastAdapter: FastAdapter<ContactItem>, item: ContactItem) {
-                    //react on the click event
-                }
-            })
-        }
-
-        chatRecyclerView.adapter = fastAdapter
-
-        itemAdapter.add()
-
-
-        userViewModel.setId("1")
         userViewModel.user.observeK(this) { userResource ->
             userResource.data?.run {
 
             }
         }
+
+        chatViewModel.chat.observeK(this) { resource ->
+            resource.data?.run {
+                statefulView.state = Data()
+                continueTextView.text = buildSpannedString {
+                    append("Voulez-vous continuer de parler avec ")
+                    bold {
+                        color(R.color.primaryVariant) {
+                            if (user1 == userViewModel.id.value) {
+                                userDao.findById(user2).nickName
+
+                            } else {
+                                userDao.findById(user1).nickName
+                            }
+                        }
+                    }
+                    append(" ?")
+                }
+            }
+        }
+        chatViewModel.setId(chatId)
     }
 }

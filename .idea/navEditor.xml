@@ -19,12 +19,12 @@
                         </option>
                         <option name="myPositions">
                           <map>
-                            <entry key="action_chatFragment_to_matchFragment">
+                            <entry key="actionChatMatch">
                               <value>
                                 <LayoutPositions />
                               </value>
                             </entry>
-                            <entry key="action_chatFragment_to_profile">
+                            <entry key="actionChatProfile">
                               <value>
                                 <LayoutPositions />
                               </value>
@@ -137,6 +137,11 @@
                         </option>
                         <option name="myPositions">
                           <map>
+                            <entry key="actionSearchChat">
+                              <value>
+                                <LayoutPositions />
+                              </value>
+                            </entry>
                             <entry key="actionSearchMatch">
                               <value>
                                 <LayoutPositions />

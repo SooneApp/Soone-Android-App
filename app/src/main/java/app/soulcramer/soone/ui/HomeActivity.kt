@@ -8,8 +8,10 @@ import android.support.v4.app.Fragment
 import android.support.v7.app.AppCompatActivity
 import androidx.navigation.findNavController
 import androidx.navigation.ui.setupWithNavController
+import app.soulcramer.soone.common.observeK
 import app.soulcramer.soone.di.Injectable
 import app.soulcramer.soone.ui.user.UserViewModel
+import app.soulcramer.soone.vo.Error
 import dagger.android.DispatchingAndroidInjector
 import dagger.android.support.HasSupportFragmentInjector
 import kotlinx.android.synthetic.main.activity_main.*
@@ -32,9 +34,12 @@ class HomeActivity : AppCompatActivity(), Injectable, HasSupportFragmentInjector
         userViewModel = ViewModelProviders.of(this, viewModelFactory)
             .get(UserViewModel::class.java)
 
-        userViewModel.setId("d344d15f-0721-48cc-a113-a7243307e80")
+        userViewModel.user.observeK(this) {
+            if (it.status is Error) {
+                userViewModel.connectUser("0603030303")
+            }
+        }
         userViewModel.connectUser("0603030303")
-
 
         bottomNavigationView.setupWithNavController(navController)
     }

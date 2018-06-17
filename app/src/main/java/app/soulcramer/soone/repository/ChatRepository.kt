@@ -4,10 +4,8 @@ import android.arch.lifecycle.LiveData
 import app.soulcramer.soone.AppCoroutineDispatchers
 import app.soulcramer.soone.api.SooneService
 import app.soulcramer.soone.db.ChatDao
-import app.soulcramer.soone.db.MessageDao
 import app.soulcramer.soone.vo.Resource
 import app.soulcramer.soone.vo.contacts.Chat
-import kotlinx.coroutines.experimental.withContext
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -18,7 +16,6 @@ import javax.inject.Singleton
 class ChatRepository @Inject constructor(
     private val dispatchers: AppCoroutineDispatchers,
     private val chatDao: ChatDao,
-    private val messageDao: MessageDao,
     private val service: SooneService
 ) {
 
@@ -34,16 +31,5 @@ class ChatRepository @Inject constructor(
 
             override fun createCall() = service.getChatById(id)
         }.asLiveData()
-    }
-
-    suspend fun sendMessage(userId: String, chatId: String, message: String): Chat? {
-        return withContext(dispatchers.network) {
-            service.sendMessage(
-                chatId,
-                userId,
-                message
-            ).execute().body()
-        }
-
     }
 }

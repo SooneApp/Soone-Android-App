@@ -3,6 +3,8 @@ package app.soulcramer.soone.ui.contact.chat
 import `fun`.soone.R
 import android.arch.lifecycle.ViewModelProvider
 import android.arch.lifecycle.ViewModelProviders
+import android.content.Context
+import android.content.SharedPreferences
 import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.support.v7.app.ActionBar
@@ -11,6 +13,8 @@ import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.content.edit
+import androidx.navigation.fragment.findNavController
 import app.soulcramer.soone.common.observeK
 import app.soulcramer.soone.di.Injectable
 import app.soulcramer.soone.ui.common.statefulview.Data
@@ -18,13 +22,13 @@ import app.soulcramer.soone.ui.user.UserViewModel
 import app.soulcramer.soone.vo.Error
 import app.soulcramer.soone.vo.Loading
 import app.soulcramer.soone.vo.Success
-import app.soulcramer.soone.vo.contacts.Chat
 import com.mikepenz.fastadapter.FastAdapter
 import com.mikepenz.fastadapter.adapters.ItemAdapter
 import com.mikepenz.fastadapter.listeners.ClickEventHook
 import kotlinx.android.synthetic.main.fragment_chat.*
 import kotlinx.android.synthetic.main.item_message.view.*
 import org.threeten.bp.ZonedDateTime
+import org.threeten.bp.chrono.ChronoZonedDateTime
 import org.threeten.bp.format.DateTimeFormatter
 import javax.inject.Inject
 
@@ -38,6 +42,10 @@ class ChatFragment : Fragment(), Injectable {
 
     private val toolbar: ActionBar by lazy {
         (activity as AppCompatActivity).supportActionBar!!
+    }
+
+    private val sharedPreferences: SharedPreferences by lazy {
+        requireActivity().getSharedPreferences("sooneSharedPref", Context.MODE_PRIVATE)
     }
 
     override fun onCreateView(
@@ -56,6 +64,8 @@ class ChatFragment : Fragment(), Injectable {
             .get(UserViewModel::class.java)
         chatViewModel = ViewModelProviders.of(this, viewModelFactory)
             .get(ChatViewModel::class.java)
+
+        toolbar.title = "Chat"
 
         val chatId = ChatFragmentArgs.fromBundle(arguments).activeChatId
 
@@ -90,9 +100,32 @@ class ChatFragment : Fragment(), Injectable {
                 is Error -> statefulView.state = statefulView.errorState
                 is Success -> {
                     chatRessource.data?.run {
-                        handleData()
+                        if (endDateTime.isBefore(ChronoZonedDateTime.from(ZonedDateTime.now()))) {
+                            sharedPreferences.edit {
+                                "activeDecision" to true
+                            }
+                            val action = ChatFragmentDirections.actionChatMatch(id, sharedPreferences.getString("activeDecision", ""))
+                            action.setChatId(id)
+                            findNavController().navigate(action)
+                        }
                     }
                 }
+            }
+        }
+        chatViewModel.messages.observeK(this) { messages ->
+            val items = messages.sortedBy {
+                ZonedDateTime.parse(it.date, DateTimeFormatter.ISO_OFFSET_DATE_TIME)
+            }.map {
+                UserMessageItem().apply {
+                    contact
+                }
+            }.reversed()
+
+            if (items.isEmpty()) {
+                statefulView.state = statefulView.emptyState
+            } else {
+                statefulView.state = Data()
+                itemAdapter.add(items)
             }
         }
         chatViewModel.setId(chatId)
@@ -106,22 +139,5 @@ class ChatFragment : Fragment(), Injectable {
                 )
             }
         }
-    }
-
-    private fun Chat.handleData() {
-        val items = messages.sortedBy {
-            ZonedDateTime.parse(it.date, DateTimeFormatter.ISO_OFFSET_DATE_TIME)
-        }.map {
-            UserMessageItem().apply {
-                contact
-            }
-        }.reversed()
-
-        if (items.isEmpty()) {
-            statefulView.state = statefulView.emptyState
-            return
-        }
-        statefulView.state = Data()
-        itemAdapter.add(items)
     }
 }

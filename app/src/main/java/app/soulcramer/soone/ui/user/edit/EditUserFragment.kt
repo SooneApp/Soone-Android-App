@@ -6,6 +6,8 @@ import android.arch.lifecycle.ViewModelProvider
 import android.arch.lifecycle.ViewModelProviders
 import android.os.Bundle
 import android.support.v4.app.Fragment
+import android.support.v7.app.ActionBar
+import android.support.v7.app.AppCompatActivity
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -33,6 +35,9 @@ class EditUserFragment : Fragment(), Injectable {
 
     private lateinit var newUser: User
     private lateinit var datePickerDialog: DatePickerDialog
+    private val toolbar: ActionBar by lazy {
+        (activity as AppCompatActivity).supportActionBar!!
+    }
 
     private var isValid = true
         set(value) {
@@ -58,6 +63,8 @@ class EditUserFragment : Fragment(), Injectable {
             .get(UserViewModel::class.java)
 
         val userId = EditUserFragmentArgs.fromBundle(arguments).userId
+
+        toolbar.title = "Edition De Profile"
 
         saveEditUserFab.show()
         saveEditUserFab.setOnClickListener {

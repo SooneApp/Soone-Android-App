@@ -7,22 +7,75 @@
     tools:context="app.soulcramer.soone.ui.HomeActivity">
 
     <app.soulcramer.soone.ui.common.statefulview.StatefulView
+        android:id="@+id/statefulView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
-        <android.support.v7.widget.RecyclerView
-            android:id="@+id/chatRecyclerView"
+        <android.support.constraint.ConstraintLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            tools:listitem="@layout/item_contact" />
-    </app.soulcramer.soone.ui.common.statefulview.StatefulView>
+            android:layout_height="match_parent">
 
-    <android.support.design.widget.FloatingActionButton
-        android:id="@+id/saveEditUserFab"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="bottom|end"
-        android:layout_margin="16dp"
-        android:visibility="invisible"
-        app:srcCompat="@drawable/ic_pen_black_24dp" />
+            <TextView
+                android:id="@+id/textView2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="72dp"
+                android:layout_marginBottom="32dp"
+                android:text="Votre session de discussion est terminé!"
+                android:textAlignment="center"
+                android:textAppearance="@style/TextAppearance.NotifyMoe.Headline4"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintVertical_bias="0.06999999" />
+
+            <Button
+                android:id="@+id/newSearchButton"
+                style="@style/Widget.MaterialComponents.Button.TextButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="32dp"
+                android:layout_marginBottom="16dp"
+                android:text="Rechercher de nouveau"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toStartOf="@+id/ContinueButton"
+                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/continueTextView"
+                app:layout_constraintVertical_bias="0.0" />
+
+            <Button
+                android:id="@+id/ContinueButton"
+                style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="32dp"
+                android:layout_marginBottom="16dp"
+                android:text="Continuer"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintStart_toEndOf="@+id/newSearchButton"
+                app:layout_constraintTop_toBottomOf="@+id/continueTextView"
+                app:layout_constraintVertical_bias="0.0" />
+
+            <TextView
+                android:id="@+id/continueTextView"
+                android:layout_width="180dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:textAlignment="center"
+                android:textAppearance="@style/TextAppearance.NotifyMoe.Subtitle1"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/textView2"
+                app:layout_constraintVertical_bias="0.32"
+                tools:text="Voulez-vous continuer de parler avec" />
+        </android.support.constraint.ConstraintLayout>
+
+    </app.soulcramer.soone.ui.common.statefulview.StatefulView>
 </android.support.design.widget.CoordinatorLayout>

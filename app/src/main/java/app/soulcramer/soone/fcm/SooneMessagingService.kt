@@ -11,9 +11,12 @@ import android.os.Build
 import android.support.v4.app.NotificationCompat
 import android.util.Log
 import androidx.core.content.edit
+import app.soulcramer.soone.db.MessageDao
 import app.soulcramer.soone.db.UserDao
+import app.soulcramer.soone.db.messageDao
 import app.soulcramer.soone.db.userDao
 import app.soulcramer.soone.ui.HomeActivity
+import app.soulcramer.soone.vo.contacts.Message
 import app.soulcramer.soone.vo.user.User
 import com.google.firebase.messaging.FirebaseMessagingService
 import com.google.firebase.messaging.RemoteMessage
@@ -54,7 +57,7 @@ class SooneMessagingService : FirebaseMessagingService() {
         // Check if message contains a notification payload.
         if (remoteMessage.notification != null) {
             Log.w(TAG, "Message Notification Body: " + remoteMessage.notification!!.body!!)
-            sendNotification(remoteMessage.notification!!.body)
+            sendNotification(remoteMessage.notification!!)
         }
 
         // Also if you intend on generating your own notifications as a result of a received FCM
@@ -81,14 +84,24 @@ class SooneMessagingService : FirebaseMessagingService() {
         val userDao: UserDao = monarchy(realmConfiguration()).userDao()
 
         val gson = GsonBuilder().create()
-        val user1: User = gson.fromJson(data["user1"], User::class.java)
-        val user2: User = gson.fromJson(data["user2"], User::class.java)
-
-        getSharedPreferences("sooneSharedPref", Context.MODE_PRIVATE).edit {
-            putString("activeChatId", data["chatId"])
+        if (data["message"] != null) {
+            val messageDao: MessageDao = monarchy(realmConfiguration()).messageDao()
+            val message: Message = gson.fromJson(data["message"], Message::class.java)
+            messageDao.insert(message)
         }
-        userDao.insert(user1)
-        userDao.insert(user2)
+        if (data["user1"] != null) {
+            val user1: User = gson.fromJson(data["user1"], User::class.java)
+            userDao.insert(user1)
+        }
+        if (data["user2"] != null) {
+            val user2: User = gson.fromJson(data["user2"], User::class.java)
+            userDao.insert(user2)
+        }
+        if (data["chatId"] != null) {
+            getSharedPreferences("sooneSharedPref", Context.MODE_PRIVATE).edit {
+                putString("activeChatId", data["chatId"])
+            }
+        }
     }
 
     /**
@@ -96,7 +109,7 @@ class SooneMessagingService : FirebaseMessagingService() {
      *
      * @param messageBody FCM message body received.
      */
-    private fun sendNotification(messageBody: String?) {
+    private fun sendNotification(notification: RemoteMessage.Notification?) {
         val intent = Intent(this, HomeActivity::class.java)
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
         val pendingIntent = PendingIntent.getActivity(this, 0 /* Request code */, intent,
@@ -106,8 +119,8 @@ class SooneMessagingService : FirebaseMessagingService() {
         val defaultSoundUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION)
         val notificationBuilder = NotificationCompat.Builder(this, channelId)
             .setSmallIcon(R.drawable.ic_pen_black_24dp)
-            .setContentTitle("FCM Message")
-            .setContentText(messageBody)
+            .setContentTitle(notification?.title)
+            .setContentText(notification?.body)
             .setAutoCancel(true)
             .setSound(defaultSoundUri)
             .setContentIntent(pendingIntent)

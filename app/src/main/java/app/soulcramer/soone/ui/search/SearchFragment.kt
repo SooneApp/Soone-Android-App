@@ -7,6 +7,8 @@ import android.content.Context
 import android.content.SharedPreferences
 import android.os.Bundle
 import android.support.v4.app.Fragment
+import android.support.v7.app.ActionBar
+import android.support.v7.app.AppCompatActivity
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -35,6 +37,10 @@ class SearchFragment : Fragment(), Injectable, SharedPreferences.OnSharedPrefere
 
     private lateinit var searchParam: SooneService.SearchBody
 
+    private val toolbar: ActionBar by lazy {
+        (activity as AppCompatActivity).supportActionBar!!
+    }
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -54,6 +60,8 @@ class SearchFragment : Fragment(), Injectable, SharedPreferences.OnSharedPrefere
 
         sharedPreferences.registerOnSharedPreferenceChangeListener(this)
         launchActiveChat(sharedPreferences)
+
+        toolbar.title = "Recherche Instantanée"
 
         userViewModel.user.observeK(this) {
             it.data?.run {
@@ -82,15 +90,23 @@ class SearchFragment : Fragment(), Injectable, SharedPreferences.OnSharedPrefere
     }
 
     override fun onSharedPreferenceChanged(sharedPreference: SharedPreferences, key: String) {
-        if (key == "activeChatId") {
+        if (key == "activeChatId" || key == "activeDecision") {
             launchActiveChat(sharedPreference)
         }
     }
 
     private fun launchActiveChat(sharedPreferences: SharedPreferences) {
         val activeChatId = sharedPreferences.getString("activeChatId", "")
+        val activeDecision = sharedPreferences.getBoolean("activeDecision", false)
+        val activeDecisionId = sharedPreferences.getString("activeDecisionId", "")
+        if (activeDecision) {
+            val action = SearchFragmentDirections.actionSearchMatch(activeChatId, activeDecisionId)
+            action.setChatId(activeChatId)
+            action.setDecisionId(activeDecisionId)
+            findNavController().navigate(action)
+        }
         if (activeChatId.isNotEmpty()) {
-            val action = SearchFragmentDirections.actionSearchMatch(activeChatId)
+            val action = SearchFragmentDirections.actionSearchChat(activeChatId)
             action.setActiveChatId(activeChatId)
             findNavController().navigate(action)
         }

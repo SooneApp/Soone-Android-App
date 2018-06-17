@@ -1,8 +1,8 @@
 package app.soulcramer.soone.db
 
 import android.arch.lifecycle.LiveData
-import android.arch.lifecycle.Transformations
 import app.soulcramer.soone.vo.contacts.Message
+import app.soulcramer.soone.vo.contacts.MessageFields
 import app.soulcramer.soone.vo.user.UserFields
 import com.zhuinden.monarchy.Monarchy
 import io.realm.Realm
@@ -17,12 +17,13 @@ class MessageDao @Inject constructor(private val monarchy: Monarchy) {
         monarchy.runTransactionSync { it.copyToRealmOrUpdate(message) }
     }
 
-    fun findByIdAsync(id: String): LiveData<Message> {
-        val chatsLiveData = monarchy.findAllCopiedWithChanges { realm ->
-            realm.where<Message>().equalTo(UserFields.ID, id)
-        }
-        return Transformations.map(chatsLiveData) {
-            it.firstOrNull()
+    fun insert(message: List<Message>) {
+        monarchy.runTransactionSync { it.copyToRealmOrUpdate(message) }
+    }
+
+    fun findByChatIdAsync(id: String): LiveData<List<Message>> {
+        return monarchy.findAllCopiedWithChanges { realm ->
+            realm.where<Message>().equalTo(MessageFields.CHAT_ID, id)
         }
     }
 

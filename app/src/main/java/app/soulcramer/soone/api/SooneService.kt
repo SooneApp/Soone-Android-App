@@ -2,6 +2,7 @@ package app.soulcramer.soone.api
 
 import android.arch.lifecycle.LiveData
 import app.soulcramer.soone.vo.contacts.Chat
+import app.soulcramer.soone.vo.contacts.Message
 import app.soulcramer.soone.vo.user.User
 import com.google.gson.annotations.SerializedName
 import kotlinx.coroutines.experimental.Deferred
@@ -74,6 +75,15 @@ interface SooneService {
         @Query("senderId") userId: String,
         @Query("content") content: String
     ): Call<Chat>
+
+    /**
+     * @param chatId
+     */
+    @GET("api/messages")
+    fun getMessages(
+        @Query("chatId") chatId: String,
+        @Query("senderId") userId: String
+    ): LiveData<ApiResponse<List<Message>>>
 
 
     data class SearchBody(
